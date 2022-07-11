@@ -1,0 +1,97 @@
+﻿<Window x:Class="ListOfExpensesAndIncomes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:ListOfExpensesAndIncomes"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"        
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="My List Of Expenses And Incomes" Height="500" Width="900"
+        Background="#ffdada" FontFamily="Georgia" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Key="Title" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="stack" TargetType="StackPanel">
+            <Setter Property="Margin" Value="25"/>
+        </Style>
+        <col:ArrayList x:Key="types">
+            <sys:String>Income</sys:String>
+            <sys:String>Purchase</sys:String>
+        </col:ArrayList>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <!--<TextBlock DockPanel.Dock="Top" Text="{Binding Path=CurrentBalance, Mode=OneWay}" Style="{DynamicResource Title}"/>-->
+        
+        <Grid Background="#ffdada">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border Margin="20 0 10 0" Background="White" VerticalAlignment="Center" MaxWidth="380" CornerRadius="25" Grid.ColumnSpan="2">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
+                </Border.Effect>
+
+                <StackPanel Style="{DynamicResource stack}">
+                    <TextBlock Text="New data" Style="{DynamicResource Title}"/>
+
+                    <ComboBox FontFamily="Georgia" Padding="0 5" Margin="0 5" x:Name="typeField" SelectionChanged="typeField_SelectionChanged">
+                        <ComboBoxItem Content="Income" IsSelected="True" x:Name="IncomeComboBoxItem"/>
+                        <ComboBoxItem Content="Purchase" x:Name="PurchaseComboBoxItem"/>
+                    </ComboBox>
+
+                    <DatePicker materialDesign:HintAssist.Hint="Date" Margin="0 5" x:Name="dateField"/>
+                    <materialDesign:TimePicker materialDesign:HintAssist.Hint="Time" x:Name="timeField" />
+
+                    <TextBox materialDesign:HintAssist.Hint="Summ" Margin="0 5" TextWrapping="Wrap" x:Name="sumField"/>
+                    <TextBox materialDesign:HintAssist.Hint="Description" Margin="0 5" MaxHeight="100" TextWrapping="Wrap" x:Name="descrField"/>
+                    <Button Margin="0 5 0 0" Content="Enter" Click="Enter_Click"/>
+                </StackPanel>
+            </Border>
+
+            
+            <Border Grid.Column="2" Grid.ColumnSpan="4" Margin="20" Background="White" VerticalAlignment="Stretch" CornerRadius="25">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
+                </Border.Effect>
+                <DockPanel Margin="20">
+                    <TextBlock Style="{DynamicResource Title}" Text="History" DockPanel.Dock="Top" Margin="5"/>
+                    <DataGrid x:Name="historyGrid" Background="White"  
+                              MaxWidth="500" AutoGenerateColumns="False" GridLinesVisibility="Vertical">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="IsHitTestVisible" Value="True"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type}" Value="Income">
+                                        <Setter Property="Foreground" Value="DarkGreen"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="Purchase">
+                                            <Setter Property="Foreground" Value="OrangeRed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date" Binding="{Binding Path=TimeOfTransaction, UpdateSourceTrigger=PropertyChanged, StringFormat='dd/MM/yyyy hh:mmtt'}" Width="170"/>
+                            <DataGridTextColumn Header="Summ" Binding="{Binding Path=Summ, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                            <DataGridTextColumn Header="Balance" Binding="{Binding Path=BalanceAfterTransaction}" Width="85" IsReadOnly="True"/>
+                            <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}" Width="100" x:Name="typeInGrid" ItemsSource="{Binding Source={StaticResource types}}"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>
