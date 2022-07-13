@@ -24,74 +24,78 @@
             <sys:String>Purchase</sys:String>
         </col:ArrayList>
     </Window.Resources>
-
-    <DockPanel LastChildFill="True">
-        <!--<TextBlock DockPanel.Dock="Top" Text="{Binding Path=CurrentBalance, Mode=OneWay}" Style="{DynamicResource Title}"/>-->
-        
-        <Grid Background="#ffdada">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Border Margin="20 0 10 0" Background="White" VerticalAlignment="Center" MaxWidth="380" CornerRadius="25" Grid.ColumnSpan="2">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
-                </Border.Effect>
-
-                <StackPanel Style="{DynamicResource stack}">
-                    <TextBlock Text="New data" Style="{DynamicResource Title}"/>
-
-                    <ComboBox FontFamily="Georgia" Padding="0 5" Margin="0 5" x:Name="typeField" SelectionChanged="typeField_SelectionChanged">
-                        <ComboBoxItem Content="Income" IsSelected="True" x:Name="IncomeComboBoxItem"/>
-                        <ComboBoxItem Content="Purchase" x:Name="PurchaseComboBoxItem"/>
-                    </ComboBox>
-
-                    <DatePicker materialDesign:HintAssist.Hint="Date" Margin="0 5" x:Name="dateField"/>
-                    <materialDesign:TimePicker materialDesign:HintAssist.Hint="Time" x:Name="timeField" />
-
-                    <TextBox materialDesign:HintAssist.Hint="Summ" Margin="0 5" TextWrapping="Wrap" x:Name="sumField"/>
-                    <TextBox materialDesign:HintAssist.Hint="Description" Margin="0 5" MaxHeight="100" TextWrapping="Wrap" x:Name="descrField"/>
-                    <Button Margin="0 5 0 0" Content="Enter" Click="Enter_Click"/>
+    <TabControl>
+        <TabControl.ItemContainerStyle>
+            <Style TargetType="TabItem">
+                <Setter Property="Background" Value="#ffdada"/>
+                <Setter Property="MinHeight" Value="40"/>
+            </Style>
+        </TabControl.ItemContainerStyle>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="New Data" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </TabItem.Header>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel Margin="0 0 0 20">
+                    <TextBlock Text="Current Balance" HorizontalAlignment="Center" Style="{StaticResource Title}"/>
+                    <TextBlock x:Name="balanceText" HorizontalAlignment="Center" FontSize="25" FontWeight="Bold"/>
+                    <!--Text="{Binding Path=CurrentBalance, Mode=OneWay}"-->
                 </StackPanel>
-            </Border>
+                <Border Margin="20 0 10 0" Background="White" MinWidth="300" MaxWidth="500" CornerRadius="25">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
+                    </Border.Effect>
 
-            
-            <Border Grid.Column="2" Grid.ColumnSpan="4" Margin="20" Background="White" VerticalAlignment="Stretch" CornerRadius="25">
+                    <StackPanel Style="{DynamicResource stack}">
+                        <TextBlock Text="New data" Style="{DynamicResource Title}"/>
+
+                        <ComboBox FontFamily="Georgia" Padding="0 5" Margin="0 5" x:Name="typeField" SelectionChanged="typeField_SelectionChanged">
+                            <ComboBoxItem Content="Income" IsSelected="True" x:Name="IncomeComboBoxItem"/>
+                            <ComboBoxItem Content="Purchase" x:Name="PurchaseComboBoxItem"/>
+                        </ComboBox>
+
+                        <DatePicker materialDesign:HintAssist.Hint="Date" Margin="0 5" x:Name="dateField"/>
+                        <materialDesign:TimePicker materialDesign:HintAssist.Hint="Time" x:Name="timeField" />
+
+                        <TextBox materialDesign:HintAssist.Hint="Summ" Margin="0 5" TextWrapping="Wrap" x:Name="sumField"/>
+                        <TextBox materialDesign:HintAssist.Hint="Description" Margin="0 5" MaxHeight="100" TextWrapping="Wrap" x:Name="descrField" MinHeight="50"/>
+                        <Button Margin="0 5 0 0" Content="Enter" Click="Enter_Click"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Text="History" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </TabItem.Header>
+            <Border Margin="20" Background="White" VerticalAlignment="Stretch" CornerRadius="25">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
                 </Border.Effect>
-                <DockPanel Margin="20">
-                    <TextBlock Style="{DynamicResource Title}" Text="History" DockPanel.Dock="Top" Margin="5"/>
-                    <DataGrid x:Name="historyGrid" Background="White"  
-                              MaxWidth="500" AutoGenerateColumns="False" GridLinesVisibility="Vertical">
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="IsHitTestVisible" Value="True"></Setter>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Type}" Value="Income">
-                                        <Setter Property="Foreground" Value="DarkGreen"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Type}" Value="Purchase">
-                                            <Setter Property="Foreground" Value="OrangeRed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding Path=TimeOfTransaction, UpdateSourceTrigger=PropertyChanged, StringFormat='dd/MM/yyyy hh:mmtt'}" Width="170"/>
-                            <DataGridTextColumn Header="Summ" Binding="{Binding Path=Summ, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-                            <DataGridTextColumn Header="Balance" Binding="{Binding Path=BalanceAfterTransaction}" Width="85" IsReadOnly="True"/>
-                            <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}" Width="100" x:Name="typeInGrid" ItemsSource="{Binding Source={StaticResource types}}"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </DockPanel>
+                <DataGrid x:Name="historyGrid" Background="White" Margin="20" 
+                              MaxWidth="850" AutoGenerateColumns="False" GridLinesVisibility="Vertical" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="IsHitTestVisible" Value="True"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="Income">
+                                    <Setter Property="Foreground" Value="DarkGreen"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}" Value="Purchase">
+                                    <Setter Property="Foreground" Value="OrangeRed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Path=TimeOfTransaction, UpdateSourceTrigger=PropertyChanged, StringFormat='dd/MM/yyyy hh:mmtt'}" Width="175"/>
+                        <DataGridTextColumn Header="Summ" Binding="{Binding Path=Summ, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                        <DataGridTextColumn Header="Balance" Binding="{Binding Path=BalanceAfterTransaction}" Width="100" IsReadOnly="True"/>
+                        <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}" Width="110" x:Name="typeInGrid" ItemsSource="{Binding Source={StaticResource types}}"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Border>
-        </Grid>
-    </DockPanel>
+        </TabItem>
+    </TabControl>
 </Window>
