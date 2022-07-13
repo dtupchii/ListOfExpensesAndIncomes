@@ -24,15 +24,13 @@ namespace ListOfExpensesAndIncomes
         private BindingList<TransactionsModel> transactionList = new BindingList<TransactionsModel>();
         private readonly string _listPath = "list.json";
         private readonly string _balancePath = "balance.json";
-        string type = "Income";
         private FileIO _file;
-        Balance op = new Balance();
-        //double balance = 0;
+        string type = "Income";
+        public double CurrentBalance { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
-            _file = new FileIO(_listPath, _balancePath);
 
             dateField.DisplayDateEnd = DateTime.Now;
             
@@ -41,6 +39,7 @@ namespace ListOfExpensesAndIncomes
         {
             try
             {
+                _file = new FileIO(_listPath, _balancePath);
                 DateTime dateTime = Convert.ToDateTime(dateField.Text + " " + timeField.Text);
                 double summ = Convert.ToDouble(sumField.Text);
 
@@ -51,8 +50,8 @@ namespace ListOfExpensesAndIncomes
                     var sortedListInstance = new BindingList<TransactionsModel>(transactionList.OrderByDescending(x => x.TimeOfTransaction).ToList());
                     transactionList = sortedListInstance;
 
-                    balanceText.Text = op.CalculatingBalance(transactionList).ToString();
-
+                    CurrentBalance = Operations.CalculatingBalance(transactionList);
+                   
                     _file.SaveData(transactionList);
                     historyGrid.ItemsSource = transactionList;
 
@@ -67,15 +66,15 @@ namespace ListOfExpensesAndIncomes
             }
             catch
             {
-                MessageBox.Show("Something went wrong!");
+                MessageBox.Show("Enter data!");
             }
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
+                _file = new FileIO(_listPath, _balancePath);
                 transactionList = _file.ReadData();
-                balanceText.Text = op.CalculatingBalance(transactionList).ToString();
             }
             catch
             {
@@ -91,7 +90,8 @@ namespace ListOfExpensesAndIncomes
             if (e.ListChangedType == ListChangedType.ItemAdded || e.ListChangedType == ListChangedType.ItemDeleted || e.ListChangedType == ListChangedType.ItemChanged)
             {
                 if (transactionList.Count > 0)
-                    balanceText.Text = op.CalculatingBalance(transactionList).ToString();
+                    CurrentBalance = Operations.CalculatingBalance(transactionList);
+                _file = new FileIO(_listPath, _balancePath);
                 _file.SaveData(transactionList);
             }
         }

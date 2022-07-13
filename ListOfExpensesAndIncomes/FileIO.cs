@@ -41,29 +41,29 @@ namespace ListOfExpensesAndIncomes
                 return new BindingList<TransactionsModel>();
         }
 
-        //public void SaveBalance(double balance)
-        //{
-        //    using (StreamWriter writer = new StreamWriter(balancePath, false))
-        //    {
-        //        writer.Write(balance);
-        //        writer.Close();
-        //    }
-        //}
-        //public double LoadBalance()
-        //{
-        //    double balance = 0;
-        //    if (File.Exists(balancePath))
-        //    {
-        //        using (StreamReader reader = new StreamReader(balancePath))
-        //        {
-        //            balance = Convert.ToDouble(reader.ReadToEnd());
-        //            reader.Close();
-        //        }
-        //    }
-        //    else
-        //        balance = 0;
+        public void SaveBalance (double balance)
+        {
+            using (StreamWriter writer = new StreamWriter(balancePath, false))
+            {               
+                writer.Write(balance);
+                writer.Close();
+            }
+        }
+        public double LoadBalance()
+        {
+            double balance = 0;
+            if (File.Exists(balancePath))
+            {
+                using (StreamReader reader = new StreamReader(balancePath))
+                {
+                    balance = Convert.ToDouble(reader.ReadToEnd());
+                    reader.Close();
+                }
+            }
+            else
+                balance = 0;
 
-        //    return balance;
-        //}
+            return balance;
+        }
     }
 }

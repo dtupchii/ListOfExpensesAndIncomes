@@ -13,6 +13,7 @@ namespace ListOfExpensesAndIncomes
         private double _summ;
         private string _type;
         private string _description;
+        private double _balanceBeforeTransaction;
         private double _balanceAfterTransaction;
 
         public TransactionsModel(DateTime dateTime, double summ, string type, string descr)
@@ -22,13 +23,23 @@ namespace ListOfExpensesAndIncomes
             _type = type;
             _description = descr;
         }
-        public double BalanceBeforeTransaction { get; set; }
-
+        public double BalanceBeforeTransaction
+        {
+            get { return _balanceBeforeTransaction; }
+            set {
+                if (_balanceBeforeTransaction == value)
+                    return;
+                else
+                {
+                    _balanceBeforeTransaction = value;
+                    OnPropertyChanged("BalanceAfterTransaction");
+                }
+            }
+        }
         public double BalanceAfterTransaction
         {
             get { return _balanceAfterTransaction; }
-            set
-            {
+            set {
                 if (_balanceAfterTransaction == value)
                     return;
                 else
