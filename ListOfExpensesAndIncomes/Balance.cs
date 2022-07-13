@@ -7,9 +7,11 @@ using System.ComponentModel;
 
 namespace ListOfExpensesAndIncomes
 {
-    internal static class Operations
+    internal class Balance
     {
-        public static double CalculatingBalance(BindingList<TransactionsModel> transactions)
+        //double currBalance;
+        public double CurrentBalance { get; set; }
+        public double CalculatingBalance(BindingList<TransactionsModel> transactions)
         {
             int i = transactions.Count - 1;
             do
@@ -25,19 +27,9 @@ namespace ListOfExpensesAndIncomes
                         transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction + transactions[i].Summ;
                         break;
                     case "Purchase":
-                        //if (transactions[i].BalanceBeforeTransaction >= transactions[i].Summ)
-                            transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction - transactions[i].Summ;
-                        //else break;
+                        transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction - transactions[i].Summ;
                     break;                    
                 }
-                //if (transactions[i].Type == "Income")
-                //{
-                //    transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction + transactions[i].Summ;
-                //}
-                //else if (transactions[i].Type == "Purchase" && transactions[i].BalanceBeforeTransaction >= transactions[i].Summ)
-                //{
-                //    transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction - transactions[i].Summ;
-                //}
                 i--;
             }
             while (i >= 0);
