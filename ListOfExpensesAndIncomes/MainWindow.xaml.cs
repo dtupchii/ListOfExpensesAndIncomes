@@ -67,7 +67,7 @@ namespace ListOfExpensesAndIncomes
             }
             catch
             {
-                MessageBox.Show("Enter data!");
+                MessageBox.Show("Something went wrong!");
             }
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
