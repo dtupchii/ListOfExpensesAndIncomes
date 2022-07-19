@@ -9,9 +9,8 @@ namespace ListOfExpensesAndIncomes
 {
     internal class Balance
     {
-        //double currBalance;
         public double CurrentBalance { get; set; }
-        public double CalculatingBalance(BindingList<TransactionsModel> transactions)
+        public double CalculatingBalance(BindingList<TransactionModel> transactions)
         {
             int i = transactions.Count - 1;
             do

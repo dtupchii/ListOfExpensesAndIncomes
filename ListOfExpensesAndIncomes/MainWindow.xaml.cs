@@ -21,13 +21,12 @@ namespace ListOfExpensesAndIncomes
     /// </summary>
     public partial class MainWindow : Window
     {
-        private BindingList<TransactionsModel> transactionList = new BindingList<TransactionsModel>();
+        private BindingList<TransactionModel> transactionList = new BindingList<TransactionModel>();
         private readonly string _listPath = "list.json";
         private readonly string _balancePath = "balance.json";
         string type = "Income";
         private FileIO _file;
         Balance op = new Balance();
-        //double balance = 0;
 
         public MainWindow()
         {
@@ -46,9 +45,9 @@ namespace ListOfExpensesAndIncomes
 
                 if (summ > 0)
                 {
-                    transactionList.Add(new TransactionsModel(dateTime, summ, type, descrField.Text));
+                    transactionList.Add(new TransactionModel(dateTime, summ, type, descrField.Text));
                                         
-                    var sortedListInstance = new BindingList<TransactionsModel>(transactionList.OrderByDescending(x => x.TimeOfTransaction).ToList());
+                    var sortedListInstance = new BindingList<TransactionModel>(transactionList.OrderByDescending(x => x.TimeOfTransaction).ToList());
                     transactionList = sortedListInstance;
 
                     balanceText.Text = op.CalculatingBalance(transactionList).ToString();

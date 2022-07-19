@@ -18,7 +18,7 @@ namespace ListOfExpensesAndIncomes
             balancePath = balancePATH;
         }
 
-        public void SaveData(BindingList<TransactionsModel> trasactionList)
+        public void SaveData(BindingList<TransactionModel> trasactionList)
         {
             using (StreamWriter writer = File.CreateText(listPath))
             {
@@ -27,18 +27,18 @@ namespace ListOfExpensesAndIncomes
             }
         }
 
-        public BindingList<TransactionsModel> ReadData()
+        public BindingList<TransactionModel> ReadData()
         {
             if (File.Exists(listPath))
             {
                 using (StreamReader reader = File.OpenText(listPath))
                 {
                     string text = reader.ReadToEnd();
-                    return JsonConvert.DeserializeObject<BindingList<TransactionsModel>>(text);
+                    return JsonConvert.DeserializeObject<BindingList<TransactionModel>>(text);
                 }
             }
             else
-                return new BindingList<TransactionsModel>();
+                return new BindingList<TransactionModel>();
         }
 
         //public void SaveBalance(double balance)
