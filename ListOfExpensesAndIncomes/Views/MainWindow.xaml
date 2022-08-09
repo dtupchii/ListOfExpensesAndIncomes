@@ -8,7 +8,7 @@
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"        
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d"
+        mc:Ignorable="d"        
         Title="My List Of Expenses And Incomes" Height="500" Width="900"
         Background="#ffdada" FontFamily="Georgia" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>

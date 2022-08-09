@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using ListOfExpensesAndIncomes.Models;
 
-namespace ListOfExpensesAndIncomes
+namespace ListOfExpensesAndIncomes.Services
 {
     internal class Balance
     {

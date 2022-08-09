@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using ListOfExpensesAndIncomes.Data;
+using ListOfExpensesAndIncomes.Services;
 using ListOfExpensesAndIncomes.Models;
 
 namespace ListOfExpensesAndIncomes.Views
@@ -55,7 +55,7 @@ namespace ListOfExpensesAndIncomes.Views
             if ((email.Length < 5 || !email.Contains("@") || !email.Contains(".")) && (login.Length < 5) && (password.Length < 7) && (beginningBalance < 0))
             {
                 email_tb.BorderBrush = Brushes.Red;
-            email_tb.ToolTip = "Enter correct email!";
+                email_tb.ToolTip = "Enter correct email!";
                 login_tb.BorderBrush = Brushes.Red;
                 password_tb.BorderBrush = Brushes.Red;
                 beginningBalance_tb.BorderBrush = Brushes.Red;
@@ -165,5 +165,6 @@ namespace ListOfExpensesAndIncomes.Views
                 }
             }
         }
+
     }
 }

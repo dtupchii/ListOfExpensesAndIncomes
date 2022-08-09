@@ -1,9 +1,5 @@
-﻿using ListOfExpensesAndIncomes.Data;
-using ListOfExpensesAndIncomes.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ListOfExpensesAndIncomes.Services;
+using ListOfExpensesAndIncomes.Models;
+using System.ComponentModel;
+using System.Data.Entity;
 
 namespace ListOfExpensesAndIncomes
 {
@@ -70,16 +70,16 @@ namespace ListOfExpensesAndIncomes
                 MessageBox.Show("Couldn't load data when window loaded");
             }
 
-           /* #region Вывод старого списка
+            /* #region Вывод старого списка
 
-            string line = "";
+             string line = "";
 
-            for (int i = 0; i < transactionListBC.Count; i++)
-            {
-                line += transactionListBC[i].TimeOfTransaction.ToString() + " " + transactionListBC[i].Summ.ToString() + " " + transactionListBC[i].Type.ToString() + " " + transactionListBC[i].Description.ToString() + "\n";
-            }
-            MessageBox.Show(line);
-            #endregion*/
+             for (int i = 0; i < transactionListBC.Count; i++)
+             {
+                 line += transactionListBC[i].TimeOfTransaction.ToString() + " " + transactionListBC[i].Summ.ToString() + " " + transactionListBC[i].Type.ToString() + " " + transactionListBC[i].Description.ToString() + "\n";
+             }
+             MessageBox.Show(line);
+             #endregion*/
 
             historyGrid.ItemsSource = transactionList;
             transactionList.ListChanged += _transactionList_ListChanged;
@@ -100,7 +100,7 @@ namespace ListOfExpensesAndIncomes
                     db.SaveChanges();
 
                     var sortedListInstance = new BindingList<Transaction>(transactionList.OrderByDescending(x => x.TimeOfTransaction).ToList());
-                    transactionList = sortedListInstance;                                        
+                    transactionList = sortedListInstance;
 
                     balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
 

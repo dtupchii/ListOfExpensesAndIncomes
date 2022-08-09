@@ -26,7 +26,7 @@ namespace ListOfExpensesAndIncomes.Models
         }
         public string Password
         {
-            get {return password; }
+            get { return password; }
             set { password = value; }
         }
         public string Email

@@ -1,15 +1,13 @@
-﻿using ListOfExpensesAndIncomes.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
-
-namespace ListOfExpensesAndIncomes
+namespace ListOfExpensesAndIncomes.Models
 {
     public class Transaction : INotifyPropertyChanged, ICloneable
     {
@@ -62,7 +60,7 @@ namespace ListOfExpensesAndIncomes
             set => Set(ref balanceAfterTransaction, value);
         }
 
-        protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propName = null)
+        protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
         {
             if (Equals(field, value))
                 return false;
@@ -72,11 +70,10 @@ namespace ListOfExpensesAndIncomes
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propName = null)
+        public void OnPropertyChanged([CallerMemberName] string propName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
         public object Clone() => MemberwiseClone();
     }
-}       
-
+}

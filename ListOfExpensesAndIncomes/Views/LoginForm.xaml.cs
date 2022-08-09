@@ -1,6 +1,4 @@
-﻿using ListOfExpensesAndIncomes.Data;
-using ListOfExpensesAndIncomes.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,41 +22,6 @@ namespace ListOfExpensesAndIncomes.Views
         public LoginForm()
         {
             InitializeComponent();
-        }
-
-        private void GoToRegistrationForm(object sender, RoutedEventArgs e)
-        {
-            this.Hide();
-            RegistrationForm registrationForm = new RegistrationForm();
-            registrationForm.Show();
-        }
-
-        private void EnterButton_Click(object sender, RoutedEventArgs e)
-        {
-            string login = login_tb.Text.ToLower(),
-                   pass = password_tb.Password;
-                        
-            try
-            {
-                User loginUser = null;
-                using (ApplicationContext db = new ApplicationContext())
-                {
-                    loginUser = db.Users.Where(b => b.Login == login && b.Password == pass).FirstOrDefault();
-                }
-                if (loginUser != null)
-                {
-                    MessageBox.Show("You entered correct data");
-                    this.Hide();
-                    MainWindow mW = new MainWindow(loginUser);
-                    mW.Show();
-                }
-                else
-                    MessageBox.Show("User doesn't exist");
-            }
-            catch
-            {
-                MessageBox.Show("Could'n find this user");
-            }
         }
     }
 }
