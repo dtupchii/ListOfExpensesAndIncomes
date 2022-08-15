@@ -88,7 +88,7 @@ namespace ListOfExpensesAndIncomes.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/ListOfExpensesAndIncomes;V1.0.0.0;component/views/registrationform.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/ListOfExpensesAndIncomes;component/views/registrationform.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\RegistrationForm.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -16,6 +16,8 @@ using ListOfExpensesAndIncomes.Services;
 using ListOfExpensesAndIncomes.Models;
 using System.ComponentModel;
 using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 
 namespace ListOfExpensesAndIncomes
 {
@@ -25,37 +27,27 @@ namespace ListOfExpensesAndIncomes
     public partial class MainWindow : Window
     {
         private BindingList<Transaction> transactionList { get; set; } = new BindingList<Transaction>();
-        private BindingList<Transaction> transactionListBC { get; set; }
-        string type = "Income";
+        //private BindingList<Transaction> transactionListBC { get; set; }
+        string? type = "Income";
         ApplicationContext db;
         User user;
         double beginningBalance = 0;
         Balance op { get; set; } = new Balance();
-        public MainWindow(User user)
+        public MainWindow(User user, ApplicationContext db)
         {
             InitializeComponent();
 
+            this.db = db;
             this.user = user;
-            beginningBalance = user.BeginningBalance;
-            db = new ApplicationContext();
-            try
-            {
-                db.Transactions.Where(b => b.UserId == user.UserId).OrderByDescending(c => c.TimeOfTransaction).Load();
-                transactionList = db.Transactions.Local.ToBindingList();
-            }
-            catch
-            {
-                transactionList = new BindingList<Transaction>();
-                //transactionListBC = new BindingList<Transaction>();
-            }
 
+            beginningBalance = user.BeginningBalance;
             dateField.DisplayDateEnd = DateTime.Now;
         }
 
         private void typeField_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cB = (ComboBox)sender;
-            ComboBoxItem item = (ComboBoxItem)cB.SelectedItem;
+            ComboBoxItem item = (ComboBoxItem)cB.SelectedItem;           
             type = item.Content.ToString();
         }
 
@@ -63,23 +55,27 @@ namespace ListOfExpensesAndIncomes
         {
             try
             {
+                db.Transactions?.Where(b => b.UserId == user.UserId).OrderByDescending(c => c.TimeOfTransaction).Load();
+                transactionList = db.Transactions.Local.ToBindingList();
                 balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
             }
             catch
             {
+                transactionList = new BindingList<Transaction>();
+                //transactionListBC = new BindingList<Transaction>();
                 MessageBox.Show("Couldn't load data when window loaded");
             }
 
-            /* #region Вывод старого списка
+            #region Вывод старого списка
 
-             string line = "";
+            /* string line = "";
 
              for (int i = 0; i < transactionListBC.Count; i++)
              {
                  line += transactionListBC[i].TimeOfTransaction.ToString() + " " + transactionListBC[i].Summ.ToString() + " " + transactionListBC[i].Type.ToString() + " " + transactionListBC[i].Description.ToString() + "\n";
              }
-             MessageBox.Show(line);
-             #endregion*/
+             MessageBox.Show(line);*/
+            #endregion
 
             historyGrid.ItemsSource = transactionList;
             transactionList.ListChanged += _transactionList_ListChanged;
@@ -94,7 +90,7 @@ namespace ListOfExpensesAndIncomes
 
                 if (summ > 0)
                 {
-                    Transaction transaction = new Transaction(dateTime, summ, type, descrField.Text, user.UserId);
+                    Transaction transaction = new Transaction(dateTime, summ, type, descrField.Text, user);
                     transactionList.Add(transaction);
                     db.Transactions.Add(transaction);
                     db.SaveChanges();
@@ -110,6 +106,7 @@ namespace ListOfExpensesAndIncomes
                     timeField.Text = "";
                     descrField.Text = "";
                     IncomeComboBoxItem.IsSelected = true;
+
                 }
                 else
                     MessageBox.Show("Summ should be positive");
@@ -118,7 +115,7 @@ namespace ListOfExpensesAndIncomes
             catch
             {
                 MessageBox.Show("Something went wrong!");
-            }
+            }            
         }
 
         private void SaveChanges(BindingList<Transaction> oldL, BindingList<Transaction> newL, ListChangedEventArgs e)
@@ -156,7 +153,7 @@ namespace ListOfExpensesAndIncomes
                         if (oldL[i] != newL[i])
                         {
                             idOfChangedItem = newL[i].Id;
-                            var transaction = db.Transactions.Find(idOfChangedItem);
+                            Transaction? transaction = db.Transactions.Find(idOfChangedItem);
 
                             if (oldL[i].TimeOfTransaction != newL[i].TimeOfTransaction)
                             {

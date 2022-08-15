@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\user\source\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\
+C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\
 ListOfExpensesAndIncomes
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\user\source\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\App.xaml
+C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\App.xaml
 31106599583
 
 11-1216202667
 225-1370627972
 Views\LoginForm.xaml;Views\MainWindow.xaml;Views\RegistrationForm.xaml;
 
-True
+False
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\source\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj": {}
+    "C:\\Users\\user\\source\\repos\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\source\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj": {
+    "C:\\Users\\user\\source\\repos\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\source\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj",
         "projectName": "ListOfExpensesAndIncomes",
-        "projectPath": "C:\\Users\\user\\source\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj",
+        "projectPath": "C:\\Users\\user\\source\\repos\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\source\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\obj\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

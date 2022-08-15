@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uCmrLSuJxfQuFbPU4w6q0aMqEcIzWnAQWmuccB5u5nBMWkBjm2O8yQoybgoplO72cuNxBihQLiKKmbSXbOYy2A==",
+  "dgSpecHash": "7+F6G2irBU1n/kJb+/oUsvUJf5LKMlw8xq+bo4G0i24gDnZggKfXOD2ky6PyFraTfupuQPpL3xLZc/u2hpBl1w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\source\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj",
+  "projectFilePath": "C:\\Users\\user\\source\\repos\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes\\ListOfExpensesAndIncomes.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\materialdesigncolors\\2.0.6\\materialdesigncolors.2.0.6.nupkg.sha512",

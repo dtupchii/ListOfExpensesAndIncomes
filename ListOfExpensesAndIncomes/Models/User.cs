@@ -3,42 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListOfExpensesAndIncomes.Models
 {
     public class User
     {
         public int UserId { get; set; }
-        private string login, password, email;
-        private double beginningBalance;
-        public User() { }
+        public User()
+        {
+            Email = "";
+            Login = "";
+            Password = "";
+            BeginningBalance = 0;
+        }
         public User(string email, string login, string password, double beginningBalance)
         {
-            this.email = email;
-            this.login = login;
-            this.password = password;
-            this.beginningBalance = beginningBalance;
+            Email = email;
+            Login = login;
+            Password = password;
+            BeginningBalance = beginningBalance;
         }
-        public string Login
-        {
-            get { return login; }
-            set { login = value; }
-        }
-        public string Password
-        {
-            get { return password; }
-            set { password = value; }
-        }
-        public string Email
-        {
-            get { return email; }
-            set { email = value; }
-        }
-        public double BeginningBalance
-        {
-            get { return beginningBalance; }
-            set { beginningBalance = value; }
-        }
-        public ICollection<Transaction> Transactions { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public double BeginningBalance { get; set; }
+        public BindingList<Transaction> Transactions { get; set; } = new BindingList<Transaction>();
     }
 }

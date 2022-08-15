@@ -6,27 +6,33 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListOfExpensesAndIncomes.Models
 {
     public class Transaction : INotifyPropertyChanged, ICloneable
     {
+        public int Id { get; set; }
         private DateTime timeOfTransaction;
         private double summ;
         private string type;
         private string description;
         private double balanceAfterTransaction;
-        public Transaction() { }
-        public Transaction(DateTime dateTime, double summ, string type, string descr, int userId)
+        public Transaction()
+        {
+            summ = 0;
+            type = "";
+            description = "";
+        }
+        public Transaction(DateTime dateTime, double summ, string type, string descr, User user)
         {
             timeOfTransaction = dateTime;
             this.summ = summ;
             this.type = type;
             description = descr;
-            UserId = userId;
+            User = user;
+            UserId = user.UserId;
         }
-        public int Id { get; set; }
-
         public DateTime TimeOfTransaction
         {
             get => timeOfTransaction;
@@ -47,8 +53,10 @@ namespace ListOfExpensesAndIncomes.Models
             get => description;
             set => Set(ref description, value);
         }
-        public int UserId { get; set; }
-        public User User { get; set; }
+
+        [ForeignKey(nameof(User))]
+        public int UserId { get; set; } //внешний ключ
+        public User? User { get; set; } //навигационное свойство
 
         [NotMapped]
         public double BalanceBeforeTransaction { get; set; }
@@ -69,7 +77,7 @@ namespace ListOfExpensesAndIncomes.Models
             return true;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "785afdbc-89a5-4bd5-9688-d2d8ec90b027": {
+      "ProjectGuid": "785afdbc-89a5-4bd5-9688-d2d8ec90b027",
+      "DisplayName": "ListOfExpensesAndIncomes",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

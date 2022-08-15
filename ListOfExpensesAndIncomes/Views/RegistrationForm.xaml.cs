@@ -21,13 +21,12 @@ namespace ListOfExpensesAndIncomes.Views
     /// </summary>
     public partial class RegistrationForm : Window
     {
-        User user;
         readonly ApplicationContext db;
-        public RegistrationForm()
+        public RegistrationForm(ApplicationContext db)
         {
             InitializeComponent();
 
-            db = new ApplicationContext();
+            this.db = db;
 
             login_tb.ToolTip = "Login should be longer than 4 symbols";
             password_tb.ToolTip = "Password should be longer than 6 symbols";
@@ -150,7 +149,7 @@ namespace ListOfExpensesAndIncomes.Views
 
                 try
                 {
-                    user = new User(email, login, password, beginningBalance);
+                    User user = new User(email, login, password, beginningBalance);
                     db.Users.Add(user);
                     db.SaveChanges();
                     MessageBox.Show("You are registered now!");
