@@ -56,7 +56,7 @@
 
                         <DatePicker materialDesign:HintAssist.Hint="Date" Margin="0 5" x:Name="dateField"/>
                         <materialDesign:TimePicker materialDesign:HintAssist.Hint="Time" x:Name="timeField" />
-
+                        
                         <TextBox materialDesign:HintAssist.Hint="Summ" Margin="0 5" TextWrapping="Wrap" x:Name="sumField"/>
                         <TextBox materialDesign:HintAssist.Hint="Description" Margin="0 5" MaxHeight="100" TextWrapping="Wrap" x:Name="descrField" MinHeight="50"/>
                         <Button Background="BlueViolet" Margin="0 5 0 0" Content="Enter" Click="Enter_Click"/>
@@ -72,12 +72,12 @@
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
                 </Border.Effect>
-                <DataGrid x:Name="historyGrid" Background="White" Margin="20"
-                          DockPanel.Dock="Top"
-                          MaxWidth="850" AutoGenerateColumns="False" GridLinesVisibility="Vertical" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                <DataGrid x:Name="historyGrid" Background="White" Margin="20" DockPanel.Dock="Top" CanUserAddRows="False" 
+                          CanUserDeleteRows="False" MaxWidth="850" AutoGenerateColumns="False" GridLinesVisibility="None"
+                          HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
-                            <Setter Property="IsHitTestVisible" Value="True"></Setter>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Type}" Value="Income">
                                     <Setter Property="Foreground" Value="DarkGreen"/>
@@ -85,15 +85,37 @@
                                 <DataTrigger Binding="{Binding Type}" Value="Purchase">
                                     <Setter Property="Foreground" Value="OrangeRed"/>
                                 </DataTrigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </DataGrid.RowStyle>
+
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Date" Binding="{Binding Path=TimeOfTransaction, UpdateSourceTrigger=PropertyChanged, StringFormat='dd/MM/yyyy hh:mmtt'}" Width="175" />
+                        <DataGridTextColumn Header="Date" Binding="{Binding Path=TimeOfTransaction, UpdateSourceTrigger=PropertyChanged, StringFormat='dd/MM/yyyy hh:mmtt'}" Width="175"/>
                         <DataGridTextColumn Header="Summ" Binding="{Binding Path=Summ, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                         <DataGridTextColumn Header="Balance" Binding="{Binding Path=BalanceAfterTransaction}" Width="100" IsReadOnly="True"/>
                         <DataGridComboBoxColumn Header="Type" SelectedItemBinding="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}" Width="110" x:Name="typeInGrid" ItemsSource="{Binding Source={StaticResource types}}"/>
                         <DataGridTextColumn Header="Description" Binding="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Background="Transparent" BorderBrush="Transparent" Visibility="Hidden"
+                                                Click="DeleteButton_Click" Height="20" VerticalAlignment="Center" x:Name="bin_button">                                            
+                                            <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\bin_icon.png"
+                                                   HorizontalAlignment="Center" />
+                                        </Button>
+                                    </StackPanel>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
+                                            <Setter TargetName="bin_button" Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

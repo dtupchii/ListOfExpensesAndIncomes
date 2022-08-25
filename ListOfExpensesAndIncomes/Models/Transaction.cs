@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ namespace ListOfExpensesAndIncomes.Models
 {
     public class Transaction : INotifyPropertyChanged, ICloneable
     {
+        //[AutoIncrement]
         public int Id { get; set; }
         private DateTime timeOfTransaction;
         private double summ;
@@ -82,6 +84,6 @@ namespace ListOfExpensesAndIncomes.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
-        public object Clone() => MemberwiseClone();
+        public object Clone() => new Transaction(TimeOfTransaction, Summ, Type, Description, new User(User.Email, User.Login, User.Password, User.BeginningBalance));
     }
 }

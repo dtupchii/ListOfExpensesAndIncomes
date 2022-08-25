@@ -46,7 +46,6 @@ namespace ListOfExpensesAndIncomes.Views
 
                 if (loginUser != null)
                 {
-                    MessageBox.Show("You entered correct data");
                     this.Hide();
                     MainWindow mW = new MainWindow(loginUser, db);
                     mW.Show();

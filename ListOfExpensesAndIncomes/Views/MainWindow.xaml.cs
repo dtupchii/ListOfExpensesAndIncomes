@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using System.Threading;
 
 namespace ListOfExpensesAndIncomes
 {
@@ -27,11 +28,12 @@ namespace ListOfExpensesAndIncomes
     public partial class MainWindow : Window
     {
         private BindingList<Transaction> transactionList { get; set; } = new BindingList<Transaction>();
-        //private BindingList<Transaction> transactionListBC { get; set; }
+        private BindingList<Transaction> transactionListBC { get; set; } = new BindingList<Transaction>();
         string? type = "Income";
         ApplicationContext db;
         User user;
         double beginningBalance = 0;
+        object locker = new();
         Balance op { get; set; } = new Balance();
         public MainWindow(User user, ApplicationContext db)
         {
@@ -57,24 +59,37 @@ namespace ListOfExpensesAndIncomes
             {
                 db.Transactions?.Where(b => b.UserId == user.UserId).OrderByDescending(c => c.TimeOfTransaction).Load();
                 transactionList = db.Transactions.Local.ToBindingList();
+
+                #region Making copy of old list
+                foreach (Transaction t in transactionList)
+                    if (t != null)
+                    {
+                        Transaction clone = (Transaction)t.Clone();
+                        clone.Id = t.Id;
+                        if (clone != null)
+                            transactionListBC.Add(clone);
+                    }
+                #endregion
+
                 balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
             }
             catch
             {
                 transactionList = new BindingList<Transaction>();
-                //transactionListBC = new BindingList<Transaction>();
+                transactionListBC = new BindingList<Transaction>();
                 MessageBox.Show("Couldn't load data when window loaded");
             }
 
-            #region Вывод старого списка
+            #region Output of old list
 
-            /* string line = "";
+            //string line = "";
 
-             for (int i = 0; i < transactionListBC.Count; i++)
-             {
-                 line += transactionListBC[i].TimeOfTransaction.ToString() + " " + transactionListBC[i].Summ.ToString() + " " + transactionListBC[i].Type.ToString() + " " + transactionListBC[i].Description.ToString() + "\n";
-             }
-             MessageBox.Show(line);*/
+            //for (int i = 0; i < transactionListBC.Count; i++)
+            //{
+            //    line += transactionListBC[i].TimeOfTransaction.ToString() + " " + transactionListBC[i].Summ.ToString() + " " + transactionListBC[i].Type.ToString() + " " + transactionListBC[i].Description.ToString() + "\n";
+            //}
+            //MessageBox.Show(line);
+
             #endregion
 
             historyGrid.ItemsSource = transactionList;
@@ -89,18 +104,30 @@ namespace ListOfExpensesAndIncomes
                 double summ = Convert.ToDouble(sumField.Text);
 
                 if (summ > 0)
-                {
+                {                    
                     Transaction transaction = new Transaction(dateTime, summ, type, descrField.Text, user);
                     transactionList.Add(transaction);
-                    db.Transactions.Add(transaction);
-                    db.SaveChanges();
+                    transactionListBC.Add(transaction);
+                    try
+                    {
+                        db.Transactions.Add(transaction);
+                        db.SaveChanges();
+                        MessageBox.Show("Item added and saved");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Couldn't add item to db and save result");
+                    }
 
                     var sortedListInstance = new BindingList<Transaction>(transactionList.OrderByDescending(x => x.TimeOfTransaction).ToList());
                     transactionList = sortedListInstance;
 
-                    balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
+                    var sortedListInstance1 = new BindingList<Transaction>(transactionListBC.OrderByDescending(x => x.TimeOfTransaction).ToList());
+                    transactionListBC = sortedListInstance1;
 
                     historyGrid.ItemsSource = transactionList;
+
+                    balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
 
                     dateField.Text = "";
                     timeField.Text = "";
@@ -118,73 +145,70 @@ namespace ListOfExpensesAndIncomes
             }            
         }
 
-        private void SaveChanges(BindingList<Transaction> oldL, BindingList<Transaction> newL, ListChangedEventArgs e)
+        private void SaveChanges(object? e)
         {
-            string line = "";
+            #region Output of old list
 
-            for (int i = 0; i < oldL.Count; i++)
-            {
-                line += oldL[i].TimeOfTransaction.ToString() + " " + oldL[i].Summ.ToString() + " " + oldL[i].Type.ToString() + " " + oldL[i].Description.ToString() + "\n";
-            }
-            MessageBox.Show(line);
+            //string line = "";
 
+            //for (int i = 0; i < transactionListBC.Count; i++)
+            //{
+            //    line += transactionListBC[i].TimeOfTransaction.ToString() + " " + transactionListBC[i].Summ.ToString() + " " + transactionListBC[i].Type.ToString() + " " + transactionListBC[i].Description.ToString() + "\n";
+            //}
+            //MessageBox.Show(line);
+
+            #endregion
 
             int idOfChangedItem = 0;
 
-            using (var db = new ApplicationContext())
+            if (e is string s)
             {
-                if (e.ListChangedType == ListChangedType.ItemDeleted)
+                lock (locker)
                 {
-                    for (int i = 0; i < newL.Count; i++)
+                    if ((e == "ItemChanged") && (transactionListBC.Count == transactionList.Count))
                     {
-                        if (oldL[i] != newL[i])
+                        for (int i = 0; i < transactionList.Count; i++)
                         {
-                            idOfChangedItem = oldL[i].Id;
-                            var transaction = db.Transactions.Find(idOfChangedItem);
-                            db.Transactions.Remove(transaction);
-                            db.SaveChanges();
-                        }
-                    }
-                }
-                else if (e.ListChangedType == ListChangedType.ItemChanged)
-                {
-                    for (int i = 0; i < newL.Count; i++)
-                    {
-                        if (oldL[i] != newL[i])
-                        {
-                            idOfChangedItem = newL[i].Id;
-                            Transaction? transaction = db.Transactions.Find(idOfChangedItem);
+                            if ((transactionListBC[i].TimeOfTransaction != transactionList[i].TimeOfTransaction) || (transactionListBC[i].Summ != transactionList[i].Summ)
+                                || (transactionListBC[i].Type != transactionList[i].Type) || (transactionListBC[i].Description != transactionList[i].Description))
+                            {
+                                idOfChangedItem = transactionList[i].Id;
+                                Transaction? transaction = db.Transactions.Find(idOfChangedItem);
 
-                            if (oldL[i].TimeOfTransaction != newL[i].TimeOfTransaction)
-                            {
-                                transaction.TimeOfTransaction = newL[i].TimeOfTransaction;
+                                if (transaction != null)
+                                {
+                                    if (transactionListBC[i].TimeOfTransaction != transactionList[i].TimeOfTransaction)
+                                    {
+                                        transaction.TimeOfTransaction = transactionList[i].TimeOfTransaction;
+                                        db.Transactions.Update(transaction);
+                                        db.SaveChanges();
+                                        MessageBox.Show("Item's time was changed in DB");
+                                    }
+                                    if (transactionListBC[i].Summ != transactionList[i].Summ)
+                                    {
+                                        transaction.Summ = transactionList[i].Summ;
+                                        db.Transactions.Update(transaction);
+                                        db.SaveChanges();
+                                        MessageBox.Show("Item's summ was changed in DB");
+                                    }
+                                    if (transactionListBC[i].Type != transactionList[i].Type)
+                                    {
+                                        transaction.Type = transactionList[i].Type;
+                                        db.Transactions.Update(transaction);
+                                        db.SaveChanges();
+                                        MessageBox.Show("Item's type was changed in DB");
+                                    }
+                                    if (transactionListBC[i].Description != transactionList[i].Description)
+                                    {
+                                        transaction.Description = transactionList[i].Description;
+                                        db.Transactions.Update(transaction);
+                                        db.SaveChanges();
+                                        MessageBox.Show("Item's description was changed in DB");
+                                    }
+                                }
+                                else
+                                    MessageBox.Show("Couldn't change item and save result");
                             }
-                            if (oldL[i].Summ != newL[i].Summ)
-                            {
-                                transaction.Summ = newL[i].Summ;
-                            }
-                            if (oldL[i].Type != newL[i].Type)
-                            {
-                                transaction.Type = newL[i].Type;
-                            }
-                            if (oldL[i].Description != newL[i].Description)
-                            {
-                                transaction.Description = newL[i].Description;
-                            }
-                            db.SaveChanges();
-                        }
-                    }
-                }
-                else if (e.ListChangedType == ListChangedType.ItemAdded)
-                {
-                    for (int i = 0; i < newL.Count; i++)
-                    {
-                        if (oldL[i] != newL[i])
-                        {
-                            idOfChangedItem = oldL[i].Id;
-                            var transaction = db.Transactions.Find(idOfChangedItem);
-                            db.Transactions.Add(transaction);
-                            db.SaveChanges();
                         }
                     }
                 }
@@ -195,9 +219,29 @@ namespace ListOfExpensesAndIncomes
             if (e.ListChangedType == ListChangedType.ItemAdded || e.ListChangedType == ListChangedType.ItemDeleted || e.ListChangedType == ListChangedType.ItemChanged)
             {
                 if (transactionList.Count > 0)
-                    balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
-                //SaveChanges(transactionListBC, transactionList, e);
+                {
+                    var sortedListInstance = new BindingList<Transaction>(transactionList.OrderByDescending(x => x.TimeOfTransaction).ToList());
+                    transactionList = sortedListInstance;
+
+                    if (e.ListChangedType == ListChangedType.ItemChanged)
+                    {
+                        Thread mainThread = Thread.CurrentThread;
+                        Thread thread = new Thread(SaveChanges);
+                        thread.Start("ItemChanged");
+                        thread.Join();
+                    }
+                }
+
+                balanceText.Text = op.CalculatingBalance(transactionList, beginningBalance).ToString();
             }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Transaction t = (Transaction)historyGrid.SelectedItem;
+            transactionList.Remove(t);
+            db.Transactions.Remove(t);
+            db.SaveChanges();
         }
     }
 }

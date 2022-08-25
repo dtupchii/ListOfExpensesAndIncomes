@@ -14,11 +14,12 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
-    <Grid>
-        <Button VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" Background="Transparent" BorderBrush="Transparent" Click="BackButton_Click">
-            <Image Source="/Data/Images/back_icon.png"/>
+    <Grid x:Name="grid">
+        <Button VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10" Background="Transparent" BorderBrush="Transparent" Click="BackButton_Click"
+                Visibility="Visible">
+            <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\back_icon.png"/>
         </Button>
-        <Border Margin="50" Background="White" MaxWidth="500" CornerRadius="25">
+        <Border Margin="45" Background="White" MaxWidth="500" CornerRadius="25">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
             </Border.Effect>
