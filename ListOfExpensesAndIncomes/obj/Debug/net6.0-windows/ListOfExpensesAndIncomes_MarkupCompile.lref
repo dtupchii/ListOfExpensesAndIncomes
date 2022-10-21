@@ -1,6 +1,11 @@
 ﻿
 FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\App.xaml;;
-FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\LoginForm.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\HistoryView.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\InitializingWindow\InitializingWindowView.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\InitializingWindow\LoginView.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\InitializingWindow\RegistrationView.xaml;;
 FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\MainWindow.xaml;;
-FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\RegistrationForm.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\NewDataView.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\SettingsView.xaml;;
+FC:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Views\StatisticView.xaml;;
 

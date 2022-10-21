@@ -8,52 +8,37 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using ListOfExpensesAndIncomes.Core;
 
 namespace ListOfExpensesAndIncomes.Models
 {
-    public class Transaction : INotifyPropertyChanged, ICloneable
+    public class Transaction : ObservableObject, ICloneable, IDataErrorInfo
     {
-        //[AutoIncrement]
         public int Id { get; set; }
-        private DateTime timeOfTransaction;
-        private double summ;
-        private string type;
-        private string description;
-        private double balanceAfterTransaction;
-        public Transaction()
-        {
-            summ = 0;
-            type = "";
-            description = "";
-        }
-        public Transaction(DateTime dateTime, double summ, string type, string descr, User user)
-        {
-            timeOfTransaction = dateTime;
-            this.summ = summ;
-            this.type = type;
-            description = descr;
-            User = user;
-            UserId = user.UserId;
-        }
+        private DateTime _timeOfTransaction = DateTime.Now.Date;
+        private double _summ;
+        private string _type;
+        private string _description;
+        private double _balanceAfterTransaction;
         public DateTime TimeOfTransaction
         {
-            get => timeOfTransaction;
-            set => Set(ref timeOfTransaction, value);
+            get => _timeOfTransaction;
+            set => Set(ref _timeOfTransaction, value);
         }
         public double Summ
         {
-            get => summ;
-            set => Set(ref summ, value);
+            get => _summ;
+            set => Set(ref _summ, value);
         }
         public string Type
         {
-            get => type;
-            set => Set(ref type, value);
+            get => _type;
+            set => Set(ref _type, value);
         }
         public string Description
         {
-            get => description;
-            set => Set(ref description, value);
+            get => _description;
+            set => Set(ref _description, value);
         }
 
         [ForeignKey(nameof(User))]
@@ -66,8 +51,8 @@ namespace ListOfExpensesAndIncomes.Models
         [NotMapped]
         public double BalanceAfterTransaction
         {
-            get => balanceAfterTransaction;
-            set => Set(ref balanceAfterTransaction, value);
+            get => _balanceAfterTransaction;
+            set => Set(ref _balanceAfterTransaction, value);
         }
 
         protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propName = "")
@@ -79,11 +64,29 @@ namespace ListOfExpensesAndIncomes.Models
             return true;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propName = "")
+        public string this[string columnName]
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "Summ":
+                        if (Summ < 0)
+                        {
+                            error = "Amount should be over 0";
+                        }
+                        break;
+                }
+                return error;
+            }
         }
-        public object Clone() => new Transaction(TimeOfTransaction, Summ, Type, Description, new User(User.Email, User.Login, User.Password, User.BeginningBalance));
+        public string Error
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public object Clone() => new Transaction { TimeOfTransaction = TimeOfTransaction, Summ = Summ, Type = Type, Description = Description,
+            User = new User { Email = User.Email, Login = User.Login, Password = User.Password, BeginningBalance = User.BeginningBalance } };
     }
 }

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\App.xaml
-31106599583
+17141710307
 
-942776783
-225-1370627972
-Views\LoginForm.xaml;Views\MainWindow.xaml;Views\RegistrationForm.xaml;
+28-1652468653
+2311539693000
+Data\AmountTextBox.xaml;Data\EnterButtonTheme.xaml;Data\MenuButtonTheme.xaml;Data\PasswordBoxTheme.xaml;Data\TextBoxesTheme.xaml;Data\TitleStyle.xaml;Data\TopMenuButtonsTheme.xaml;Data\TopPanelTheme.xaml;Data\ValidationFailed.xaml;Views\HistoryView.xaml;Views\InitializingWindow\InitializingWindowView.xaml;Views\InitializingWindow\LoginView.xaml;Views\InitializingWindow\RegistrationView.xaml;Views\MainWindow.xaml;Views\NewDataView.xaml;Views\SettingsView.xaml;Views\StatisticView.xaml;
 
 False
 

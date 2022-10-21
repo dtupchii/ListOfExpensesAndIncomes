@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="ListOfExpensesAndIncomes.Views.InitializingWindow.RegistrationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views.InitializingWindow"
+             xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels.InitializingWindow"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DataContext="{d:DesignInstance Type=vm:RegistrationViewModel}"
+             mc:Ignorable="d" FontFamily="Georgia"
+             d:DesignHeight="430" d:DesignWidth="400"
+             x:Name="usC">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="validationFailed">
+            <StackPanel Margin="0 0 0 5">
+                <Border BorderBrush="Red" BorderThickness="1"
+                        CornerRadius="10"
+                        MinWidth="200"
+                        Height="30">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Red" FontSize="10" 
+                           Text="Please enter correct beginning balance"
+                           Margin="10 0 0 5"/>
+            </StackPanel>
+        </ControlTemplate>
+        
+        <ControlTemplate x:Key="emailValidationFailed">
+            <StackPanel Margin="0 0 0 5">
+                <Border BorderBrush="Red" BorderThickness="1"
+                        CornerRadius="10"
+                        MinWidth="200"
+                        Height="30">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Red" FontSize="10" 
+                           Text="Please enter correct email"
+                           Margin="10 0 0 5"/>
+            </StackPanel>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="loginValidationFailed">
+            <StackPanel Margin="0 0 0 5">
+                <Border BorderBrush="Red" BorderThickness="1"
+                        CornerRadius="10"
+                        MinWidth="200"
+                        Height="30">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Red" FontSize="10" 
+                           Text="Login should be >3 symbols"
+                           Margin="10 0 0 5"/>
+            </StackPanel>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Border Background="White" MaxWidth="700" CornerRadius="25"
+            Padding="50 10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
+        </Border.Effect>
+        <StackPanel VerticalAlignment="Center">
+            <StackPanel DataContext="{Binding UserVM}">
+                <TextBlock Text="Registration"
+                       Style="{StaticResource TitleStyle}"/>
+
+                <TextBlock Text="Email"
+                       Margin="10 10 0 3"/>
+                <TextBox Style="{StaticResource TextBoxTheme}"
+                        Validation.ErrorTemplate="{StaticResource emailValidationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Email"
+                                 Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBlock Text="Login"
+                       Margin="10 10 0 3"/>
+                <TextBox Style="{StaticResource TextBoxTheme}"
+                        Validation.ErrorTemplate="{StaticResource loginValidationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="Login"
+                                 Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBlock Text="Password (from 6 symbols)"
+                       Margin="10 10 0 3"/>
+                <Border CornerRadius="10"
+                            Background="Transparent"
+                            Height="30"
+                            BorderBrush="Gray"
+                            BorderThickness="0.8">
+                    <PasswordBox Margin="1"
+                             PasswordChanged="PasswordBox_PasswordChanged"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             VerticalContentAlignment="Center"
+                             Padding="5"/>
+                </Border>
+
+                <TextBlock Text="Beginning Balance"
+                       Margin="10 10 0 3"/>
+                <TextBox Style="{StaticResource TextBoxTheme}"
+                        Validation.ErrorTemplate="{StaticResource validationFailed}">
+                    <TextBox.Text>
+                        <Binding Path="BeginningBalance"
+                                 Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+
+            <Button IsDefault="True"
+                    Command="{Binding RegistrationCommand}"
+                    Style="{StaticResource EnterButton}">
+                
+                <TextBlock Text="Enter"
+                           FontSize="18"/>
+            </Button>
+        </StackPanel>
+    </Border>
+</UserControl>

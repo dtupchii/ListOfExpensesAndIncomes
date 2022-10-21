@@ -7,21 +7,63 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\LoginForm.xaml.cs">
+    <Compile Update="Views\HistoryView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\RegistrationForm.xaml.cs">
+    <Compile Update="Views\InitializingWindow\InitializingWindowView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\InitializingWindow\LoginView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\InitializingWindow\RegistrationView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\MainWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\NewDataView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\SettingsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\StatisticView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\LoginForm.xaml">
+    <Page Update="Data\EnterButtonTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Data\TopPanelTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Data\ValidationFailed.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\HistoryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\InitializingWindow\InitializingWindowView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\InitializingWindow\LoginView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\InitializingWindow\RegistrationView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\RegistrationForm.xaml">
+    <Page Update="Views\NewDataView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\StatisticView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

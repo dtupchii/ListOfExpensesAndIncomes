@@ -14,7 +14,6 @@ namespace ListOfExpensesAndIncomes.Services
         public DbSet<User> Users { get; set; }
         public ApplicationContext()
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,9 +29,6 @@ namespace ListOfExpensesAndIncomes.Services
                 .HasOne<User>(t => t.User)
                 .WithMany(t => t.Transactions)
                 .HasForeignKey(t => t.UserId);
-
-
-
         }
     }
 }

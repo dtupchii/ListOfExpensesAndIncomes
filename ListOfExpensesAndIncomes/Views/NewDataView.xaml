@@ -1,0 +1,218 @@
+﻿<UserControl x:Class="ListOfExpensesAndIncomes.Views.NewData"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views"
+             xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels"
+             d:DataContext="{d:DesignInstance Type=vm:NewDataViewModel}"
+             mc:Ignorable="d" Background="Transparent"
+             d:DesignHeight="450" d:DesignWidth="680"
+             FontFamily="Georgia">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="validationFailed">
+            <StackPanel Margin="0 0 0 5">
+                <Border BorderBrush="Red" BorderThickness="1"
+                        CornerRadius="10"
+                        MinWidth="200"
+                        Height="30">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Red" FontSize="10" 
+                           Text="Please enter correct amount"
+                           Margin="10 0 0 5"/>
+            </StackPanel>
+        </ControlTemplate>
+    </UserControl.Resources>
+    
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Background="White"
+                MinWidth="300"
+                MaxWidth="500"
+                CornerRadius="25">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="50" 
+                                  ShadowDepth="0" 
+                                  Color="LightGray"/>
+            </Border.Effect>
+
+            <StackPanel Margin="30">
+                <TextBlock Text="New data"
+                           HorizontalAlignment="Center"
+                           FontSize="18"/>
+                
+                <TextBlock Text="Type of transaction"/>
+                <ComboBox FontFamily="Georgia"
+                          Padding="5"
+                          Margin="0 5"
+                          Background="Transparent"
+                          SelectedValue="{Binding NewTransaction.Type, Mode=TwoWay}">                          
+                    <ComboBoxItem Content="Income"
+                          Background="Transparent"/>
+                    <ComboBoxItem Content="Purchase"
+                          Background="Transparent"/>
+                </ComboBox>
+
+                <TextBlock Text="Date"/>
+                <DatePicker Margin="0 5" Padding="5 4"
+                            DisplayDateEnd="{Binding Today}">
+                    <DatePicker.Resources>
+                        <Style TargetType="{x:Type DatePickerTextBox}">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Border CornerRadius="5"
+                                                    BorderBrush="Gray"
+                                                    BorderThickness="0.8"
+                                                    Padding="2">
+                                            <TextBox x:Name="PART_TextBox" 
+                                                    BorderBrush="Transparent"
+                                                     BorderThickness="0"
+                                                 Text="{Binding Path=SelectedDate, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+
+                <TextBlock Text="Time"
+                           Margin="0 10 0 3"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Border Grid.Column="0"
+                            Height="25"
+                            CornerRadius="10"
+                            Margin="0 5"
+                            BorderBrush="Gray"
+                            BorderThickness="0.8">
+                        
+                        <Grid Margin="15 3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     Grid.RowSpan="2"
+                                     BorderThickness="0"
+                                     Text="23"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalContentAlignment="Center"/>
+
+                            <Button Grid.Column="1"
+                                    Margin="1"
+                                    BorderThickness="0.5">
+                                <Image Source="/Data/Images/up.png"
+                                       Height="10"
+                                       VerticalAlignment="Center"/>
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Grid.Row="1"
+                                    Margin="1"
+                                    BorderThickness="0.5">
+                                <Image Source="/Data/Images/down.png"
+                                       Height="10"
+                                       VerticalAlignment="Center"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                    <TextBlock Grid.Column="1"
+                               Text=":"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                    <Border Grid.Column="2"
+                            Height="25"
+                            CornerRadius="10"
+                            Margin="0 5"
+                            BorderBrush="Gray"
+                            BorderThickness="0.8">
+
+                        <Grid Margin="15 3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     Grid.RowSpan="2"
+                                     BorderThickness="0"
+                                     Text="45"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalContentAlignment="Center"/>
+
+                            <Button Grid.Column="1"
+                                    Margin="1"
+                                    BorderThickness="0.5">
+                                <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\up.png"
+                                       Height="10"
+                                       VerticalAlignment="Center"/>
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Grid.Row="1"
+                                    Margin="1"
+                                    BorderThickness="0.5">
+                                <Image Source="/Data/Images/down.png"
+                                       Height="10"
+                                       VerticalAlignment="Center"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <StackPanel DataContext="{Binding NewTransaction}"
+                            Margin="0 0 0 5">
+                    <TextBlock Text="Amount"/>
+                    <TextBox TextWrapping="Wrap"
+                             Style="{StaticResource TextBoxTheme}"
+                             Validation.ErrorTemplate="{StaticResource validationFailed}"
+                             Margin="0 5" 
+                             Padding="5 4">
+                        <TextBox.Text>
+                            <Binding Path="Summ"
+                                    Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
+                <TextBlock Text="Description"/>
+                <TextBox Text="{Binding NewTransaction.Description, Mode=TwoWay}"
+                         Style="{StaticResource TextBoxTheme}"
+                         Height="50"
+                         TextWrapping="Wrap"
+                         Margin="0 5" Padding="5 4"
+                         MaxHeight="100"
+                         MinHeight="50"/>
+                
+                <Button IsDefault="True"
+                        Command="{Binding AddTransactionCommand}"                        
+                        Style="{StaticResource EnterButton}">
+
+                    <TextBlock Text="Enter"
+                           FontSize="18"/>
+                </Button>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

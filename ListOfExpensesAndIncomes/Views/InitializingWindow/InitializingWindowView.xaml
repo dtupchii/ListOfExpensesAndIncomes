@@ -1,0 +1,64 @@
+﻿<Window x:Class="ListOfExpensesAndIncomes.Views.InitializingWindow.InitializingWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views.InitializingWindow"
+        xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels.InitializingWindow"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Height="450" Width="400" Background="Transparent" AllowsTransparency="True">
+
+    <Window.DataContext>
+        <vm:InitializingWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+    </Window.Resources>
+
+    <Window.Visibility>
+        <Binding Path="IsViewVisible.Visible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
+    </Window.Visibility>
+
+    <Border Background="#ffdada" CornerRadius="15">
+        <DockPanel LastChildFill="True">
+            <StackPanel DockPanel.Dock="Top" Style="{StaticResource TopPanel}">
+                <Button Style="{StaticResource TopPanelButtons}" Command="{Binding CloseCommand}">
+                    <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\close_icon_alternative.png"/>
+                </Button>
+
+                <Button Style="{StaticResource TopPanelButtons}" IsEnabled="False">
+                    <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\restore_down_icon_alternative.png"/>
+                </Button>
+
+                <Button Style="{StaticResource TopPanelButtons}" Command="{Binding MinimizeCommand}">
+                    <TextBlock Text="__"/>
+                </Button>
+            </StackPanel>
+
+            <Grid HorizontalAlignment="Stretch"
+                  DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton IsChecked="True"
+                             Content="Login"
+                             Command="{Binding LoginViewCommand}"
+                             x:Name="LoginButton"
+                             Style="{StaticResource LoginButtonTheme}"/>
+
+                <RadioButton Grid.Column="1"
+                            Content="Registration"
+                            Command="{Binding RegistrationViewCommand}"
+                            x:Name="RegistrationButton"
+                            Style="{StaticResource LoginButtonTheme}"/>
+            </Grid>
+
+            <ContentControl Content="{Binding CurrentView, Mode=TwoWay}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+        </DockPanel>
+    </Border>
+</Window>

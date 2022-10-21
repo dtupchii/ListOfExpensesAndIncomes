@@ -8,9 +8,9 @@ using ListOfExpensesAndIncomes.Models;
 
 namespace ListOfExpensesAndIncomes.Services
 {
-    internal class Balance
+    public class Balance
     {
-        public double CalculatingBalance(BindingList<Transaction> transactions, double beginningBalance)
+        public static double CalculateBalance(BindingList<Transaction> transactions, double beginningBalance)
         {
             if (transactions.Count > 0)
             {
