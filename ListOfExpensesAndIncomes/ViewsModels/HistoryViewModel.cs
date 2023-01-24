@@ -23,6 +23,7 @@ namespace ListOfExpensesAndIncomes.ViewsModels
         {
             _db = db;
             _userHistory = user;
+            _selectedTransaction = new Transaction();
         }
 
         public User UserHistory

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views.InitializingWindow"
         xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels.InitializingWindow"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowStyle="None"
-        Height="450" Width="400" Background="Transparent" AllowsTransparency="True">
+        Height="520" Width="450" Background="Transparent" AllowsTransparency="True"
+        FontFamily="Georgia">
 
     <Window.DataContext>
         <vm:InitializingWindowViewModel/>

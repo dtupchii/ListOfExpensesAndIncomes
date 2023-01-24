@@ -33,6 +33,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Data\ComboBoxTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Data\DataGridTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Data\EnterButtonTheme.xaml">
       <SubType>Designer</SubType>
     </Page>

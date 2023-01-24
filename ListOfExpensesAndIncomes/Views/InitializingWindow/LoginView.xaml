@@ -7,10 +7,13 @@
              xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels.InitializingWindow"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
-             mc:Ignorable="d" d:DesignHeight="400" d:DesignWidth="400"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="450"
              FontFamily="Georgia">
 
-    <Border Background="White" MaxWidth="500" CornerRadius="25">
+    <Border Background="White" MaxWidth="500" CornerRadius="25"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            MinWidth="300">
         <Border.Effect>
             <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
         </Border.Effect>
@@ -21,18 +24,19 @@
                        Style="{StaticResource TitleStyle}"/>
             
             <TextBlock Text="Login"
-                       Margin="10 10 0 3"/>
-            <TextBox Text="{Binding UserLogin.Login}"
-                     Style="{StaticResource TextBoxTheme}"/>
+                       Margin="10 0 0 3"/>
+            <TextBox Text="{Binding UserLogin.Login, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource TextBoxTheme}"
+                     Height="28"/>
 
             <TextBlock Text="Password"
-                       Margin="10 10 0 3"/>
+                       Margin="10 0 0 3"/>
             <Border CornerRadius="10"
                             Background="Transparent"
-                            Height="30"
+                            Height="28"
                             BorderBrush="Gray"
                             BorderThickness="0.8"
-                            Margin="0 0 0 10">
+                            Margin="0 0 0 14">
                 <PasswordBox Margin="1"
                              PasswordChanged="tbPassword_PasswordChanged"
                              BorderThickness="0"
@@ -43,7 +47,8 @@
 
             <Button IsDefault="True"
                     Command="{Binding LoginCommand}"
-                    Style="{StaticResource EnterButton}">
+                    Style="{StaticResource EnterButton}"
+                    Height="30">
                 <TextBlock Text="Enter"
                            FontSize="18"/>
             </Button>

@@ -1,5 +1,4 @@
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\ListOfExpensesAndIncomes.csproj.AssemblyReference.cache
-C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\Data\AmountTextBox.baml
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\Data\EnterButtonTheme.baml
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\Data\MenuButtonTheme.baml
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\Data\PasswordBoxTheme.baml
@@ -123,3 +122,5 @@ C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\ref\ListOfExpensesAndIncomes.dll
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\ListOfExpensesAndIncomes.pdb
 C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\ListOfExpensesAndIncomes.genruntimeconfig.cache
+C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\Data\ComboBoxTheme.baml
+C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\obj\Debug\net6.0-windows\Data\DataGridTheme.baml

@@ -12,6 +12,7 @@ namespace ListOfExpensesAndIncomes.Services
     {
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
         public ApplicationContext()
         {
             Database.EnsureCreated();
@@ -29,6 +30,11 @@ namespace ListOfExpensesAndIncomes.Services
                 .HasOne<User>(t => t.User)
                 .WithMany(t => t.Transactions)
                 .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<User>()
+                .HasOne<Currency>(c => c.Currency)
+                .WithMany(u => u.Users)
+                .HasForeignKey(c => c.CurrencyId);
         }
     }
 }

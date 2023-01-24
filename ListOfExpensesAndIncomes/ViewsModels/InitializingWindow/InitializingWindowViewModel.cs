@@ -46,20 +46,18 @@ namespace ListOfExpensesAndIncomes.ViewsModels.InitializingWindow
         public InitializingWindowViewModel()
         {
             IsViewVisible.Visible = true;
-            LoginVM = new LoginViewModel(db, IsViewVisible);
-            RegistrationVM = new RegistrationViewModel(db, IsViewVisible);
-            CurrentView = LoginVM;
+            CurrentView = new LoginViewModel(db, IsViewVisible);
 
             CloseCommand = new RelayCommand(o => CloseAction());
             MinimizeCommand = new RelayCommand(o =>MinimizeAction());
 
             LoginViewCommand = new RelayCommand(o =>
             {
-                CurrentView = LoginVM;
+                CurrentView = new LoginViewModel(db, IsViewVisible);
             });
             RegistrationViewCommand = new RelayCommand(o =>
             {
-                CurrentView = RegistrationVM;
+                CurrentView = new RegistrationViewModel(db, IsViewVisible);
             });
         }
 

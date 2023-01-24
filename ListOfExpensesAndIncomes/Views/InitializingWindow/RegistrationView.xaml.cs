@@ -29,7 +29,7 @@ namespace ListOfExpensesAndIncomes.Views.InitializingWindow
         {
             if (this.DataContext != null)
             {
-                ((dynamic)this.DataContext).UserVM.Password = ((PasswordBox)sender).Password;
+                ((dynamic)this.DataContext).UserReg.Password = ((PasswordBox)sender).Password;
             }
         }
     }

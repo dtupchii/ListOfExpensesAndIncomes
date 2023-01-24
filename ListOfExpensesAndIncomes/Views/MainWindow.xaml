@@ -19,7 +19,7 @@
                     <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\restore_down_icon_alternative.png"/>
                 </Button>
 
-                <Button Style="{StaticResource TopPanelButtons}" >
+                <Button Style="{StaticResource TopPanelButtons}">
                     <TextBlock Text="__"/>
                 </Button>
             </StackPanel>
@@ -61,10 +61,20 @@
                             FlowDirection="RightToLeft"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-
-                    <TextBlock Text="{Binding CurrentBalance, Mode=TwoWay}" FontSize="20"
-                               Margin="15 0" FontWeight="Bold" FontStyle="Italic"/>
-                    <TextBlock Text="Current Balance" FontSize="20"/>
+                    <TextBlock FontFamily="Noto Sans Japanese" 
+                               FontSize="20"
+                               Margin="15 0" 
+                               FontWeight="DemiBold" 
+                               FontStyle="Italic">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} {1}" Mode="TwoWay">
+                                <Binding Path="CurrentBalance"/>
+                                <Binding Path="UserMainV.Currency.Symbol"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock Text="Current Balance" 
+                               FontSize="20"/>
                 </StackPanel>
 
                 <ContentControl Grid.Row="1"

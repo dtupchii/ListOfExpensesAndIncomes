@@ -7,45 +7,16 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using ListOfExpensesAndIncomes.Core;
+using System.Text.RegularExpressions;
 
 namespace ListOfExpensesAndIncomes.Models
 {
     public class User : ObservableObject, IDataErrorInfo
     {
         private int _id;
-        private string _login, _password, _email;
-        private double _beginningBalance;
-        private BindingList<Transaction> _transactions = new BindingList<Transaction>();
+        private string _login, _password, _email, _beginningBalance;
+        private BindingList<Transaction> _transactions = new();
 
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = String.Empty;
-                switch (columnName)
-                {
-                    case "BeginningBalance":
-                        if (BeginningBalance < 0)
-                        {
-                            error = "BeginningBalance должен быть больше 0";
-                        }
-                        break;
-                    case "Email":
-                        if(!Email.Contains('@') || !Email.Contains('.') || Email.Length == 0)
-                        {
-                            error = "Email должен быть больше 0";
-                        }
-                            break;
-                    case "Login":
-                        if ((Login is null) || (Login.Length < 4))
-                        {
-                            error = "Login должен быть больше 6";
-                        }
-                        break;
-                }
-                return error;
-            }
-        }
         public int UserId
         {
             get { return _id; }
@@ -82,7 +53,7 @@ namespace ListOfExpensesAndIncomes.Models
                 OnPropertyChanged();
             }
         }
-        public double BeginningBalance
+        public string BeginningBalance
         {
             get { return _beginningBalance; }
             set
@@ -91,6 +62,8 @@ namespace ListOfExpensesAndIncomes.Models
                 OnPropertyChanged();
             }
         }
+        public Currency Currency { get; set; }  //навигационное свойство
+        public int CurrencyId { get; set; } //внешний ключ
         public BindingList<Transaction> Transactions
         {
             get { return _transactions; }
@@ -98,6 +71,33 @@ namespace ListOfExpensesAndIncomes.Models
             {
                 _transactions = value;
                 OnPropertyChanged();
+            }
+        }
+
+        //Validation rules
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "Email":
+                        string pattern = @"^((\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)\s*[;]{0,1}[a-z]*)+$";
+                        if ((Email.Length > 0) && (!Regex.IsMatch(Email, pattern, RegexOptions.IgnoreCase)))
+                        {
+                            error = "Email должен быть больше 0";
+                        }
+                        break;
+                    case "BeginningBalance":
+                        string bBPattern = @"(^[1-9]+(\d*)?(\.\d{1,2})?$)|(^[0-9]?\.\d{1,2}$)|(^0$)";
+                        if (BeginningBalance.Length > 0 && !Regex.IsMatch(BeginningBalance, bBPattern))
+                        {
+                            error = "BeginningBalance должен быть больше 0";
+                        }
+                        break;
+                }
+                return error;
             }
         }
         public string Error

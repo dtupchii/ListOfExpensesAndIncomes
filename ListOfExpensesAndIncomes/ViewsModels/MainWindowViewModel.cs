@@ -25,7 +25,6 @@ namespace ListOfExpensesAndIncomes.ViewsModels
 {
     public class MainWindowViewModel : ObservableObject
     {
-        User user;
         readonly ApplicationContext db;
         object locker = new();
         private object _currentView;
@@ -50,6 +49,7 @@ namespace ListOfExpensesAndIncomes.ViewsModels
                 OnPropertyChanged();
             }
         }
+        public User UserMainV { get; set; }
         public Action CloseAction { get; set; }
         public Action MinimizeAction { get; set; }
         public RelayCommand CloseCommand { get; set; }
@@ -63,18 +63,18 @@ namespace ListOfExpensesAndIncomes.ViewsModels
         public MainWindowViewModel(User user, ApplicationContext db)
         {
             this.db = db;
-            this.user = user;
+            UserMainV = user;
 
             try
             {
                 db.Transactions.Where(b => b.UserId == user.UserId).OrderByDescending(c => c.TimeOfTransaction).Load();
                 user.Transactions = db.Transactions.Local.ToBindingList();
+                user.Currency = db.Currencies.Where(c => c.CurrencyId == user.CurrencyId).FirstOrDefault();
             }
             catch
             {
                 user.Transactions = new BindingList<Transaction>();
-                user.BeginningBalance = 0;
-                MessageBox.Show("Couldn't load data when window loaded or you are a new user");
+                MessageBox.Show("Couldn't load data when window loaded");
             }
 
 
@@ -94,7 +94,7 @@ namespace ListOfExpensesAndIncomes.ViewsModels
             });
             HistoryViewCommand = new RelayCommand(o =>
             {
-                CurrentView = HistoryVM;
+                CurrentView = new HistoryViewModel(user, db);
             });
 
             CloseCommand = new RelayCommand(o => CloseAction());
@@ -106,23 +106,23 @@ namespace ListOfExpensesAndIncomes.ViewsModels
         {
             if (e.ListChangedType == ListChangedType.ItemChanged)
             {
-                if (CopyOfList.transactionsBC.Count == user.Transactions.Count)
+                if (CopyOfList.transactionsBC.Count == UserMainV.Transactions.Count)
                 {
-                    for (int i = 0; i < user.Transactions.Count; i++)
+                    for (int i = 0; i < UserMainV.Transactions.Count; i++)
                     {
-                        if ((CopyOfList.transactionsBC[i].TimeOfTransaction != user.Transactions[i].TimeOfTransaction) || (CopyOfList.transactionsBC[i].Summ != user.Transactions[i].Summ) ||
-                        (CopyOfList.transactionsBC[i].Type != user.Transactions[i].Type) || (CopyOfList.transactionsBC[i].Description != user.Transactions[i].Description))
+                        if ((CopyOfList.transactionsBC[i].TimeOfTransaction != UserMainV.Transactions[i].TimeOfTransaction) || (CopyOfList.transactionsBC[i].Summ != UserMainV.Transactions[i].Summ) ||
+                        (CopyOfList.transactionsBC[i].Type != UserMainV.Transactions[i].Type) || (CopyOfList.transactionsBC[i].Description != UserMainV.Transactions[i].Description))
                         {
                             Thread mainThread = Thread.CurrentThread;
                             Thread thread = new Thread(SaveChanges);
                             thread.Start(i);
                             thread.Join();
-                            CurrentBalance = Balance.CalculateBalance(user.Transactions, user.BeginningBalance);
-                            CopyOfList.MakeCopy(user.Transactions);
+                            CurrentBalance = Balance.CalculateBalance(UserMainV.Transactions, UserMainV.BeginningBalance);
+                            CopyOfList.MakeCopy(UserMainV.Transactions);
 
                             break;
                         }
-                        else if (CopyOfList.transactionsBC[i].BalanceAfterTransaction != user.Transactions[i].BalanceAfterTransaction)
+                        else if (CopyOfList.transactionsBC[i].BalanceAfterTransaction != UserMainV.Transactions[i].BalanceAfterTransaction)
                             break;
 
                     }
@@ -130,12 +130,12 @@ namespace ListOfExpensesAndIncomes.ViewsModels
             }
             if (e.ListChangedType == ListChangedType.ItemAdded || e.ListChangedType == ListChangedType.ItemDeleted)
             {
-                if (user.Transactions.Count > 0)
+                if (UserMainV.Transactions.Count > 0)
                 {
-                    var sortedListInstance = new BindingList<Transaction>(user.Transactions.OrderByDescending(x => x.TimeOfTransaction).ToList());
-                    user.Transactions = sortedListInstance;
+                    var sortedListInstance = new BindingList<Transaction>(UserMainV.Transactions.OrderByDescending(x => x.TimeOfTransaction).ToList());
+                    UserMainV.Transactions = sortedListInstance;
                 }
-                CurrentBalance = Balance.CalculateBalance(user.Transactions, user.BeginningBalance);
+                CurrentBalance = Balance.CalculateBalance(UserMainV.Transactions, UserMainV.BeginningBalance);
             }
         }
 
@@ -145,26 +145,26 @@ namespace ListOfExpensesAndIncomes.ViewsModels
             {
                 lock (locker)
                 {
-                    Transaction transaction = db.Transactions.Find(user.Transactions[i].Id);
+                    Transaction transaction = db.Transactions.Find(UserMainV.Transactions[i].Id);
 
                     if (transaction != null)
                     {
                         #region Saving changes to DB
-                        if (CopyOfList.transactionsBC[i].TimeOfTransaction != user.Transactions[i].TimeOfTransaction)
+                        if (CopyOfList.transactionsBC[i].TimeOfTransaction != UserMainV.Transactions[i].TimeOfTransaction)
                         {
-                            transaction.TimeOfTransaction = user.Transactions[i].TimeOfTransaction;
+                            transaction.TimeOfTransaction = UserMainV.Transactions[i].TimeOfTransaction;
                         }
-                        if (CopyOfList.transactionsBC[i].Summ != user.Transactions[i].Summ)
+                        if (CopyOfList.transactionsBC[i].Summ != UserMainV.Transactions[i].Summ)
                         {
-                            transaction.Summ = user.Transactions[i].Summ;
+                            transaction.Summ = UserMainV.Transactions[i].Summ;
                         }
-                        if (CopyOfList.transactionsBC[i].Type != user.Transactions[i].Type)
+                        if (CopyOfList.transactionsBC[i].Type != UserMainV.Transactions[i].Type)
                         {
-                            transaction.Type = user.Transactions[i].Type;
+                            transaction.Type = UserMainV.Transactions[i].Type;
                         }
-                        if (CopyOfList.transactionsBC[i].Description != user.Transactions[i].Description)
+                        if (CopyOfList.transactionsBC[i].Description != UserMainV.Transactions[i].Description)
                         {
-                            transaction.Description = user.Transactions[i].Description;
+                            transaction.Description = UserMainV.Transactions[i].Description;
                         }
                         db.Transactions.Update(transaction);
                         db.SaveChanges();

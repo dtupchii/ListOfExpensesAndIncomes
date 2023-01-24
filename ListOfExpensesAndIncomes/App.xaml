@@ -15,16 +15,18 @@
                 <ResourceDictionary Source="Data/TopPanelTheme.xaml"/>
                 <ResourceDictionary Source="Data/EnterButtonTheme.xaml"/>
                 <ResourceDictionary Source="Data/TitleStyle.xaml"/>
-
-                <!--Main Window Styles-->
-                <ResourceDictionary Source="Data/MenuButtonTheme.xaml"/>
-                <ResourceDictionary Source="Data/AmountTextBox.xaml"/>
-
+                <ResourceDictionary Source="Data/ValidationFailed.xaml"/>
+                <ResourceDictionary Source="Data/ComboBoxTheme.xaml"/>
+                
+                
                 <!--Initializing Window Styles-->
                 <ResourceDictionary Source="Data/TopMenuButtonsTheme.xaml"/>
                 <ResourceDictionary Source="Data/PasswordBoxTheme.xaml"/>
                 <ResourceDictionary Source="Data/TextBoxesTheme.xaml"/>
-
+                
+                <!--Main Window Styles-->
+                <ResourceDictionary Source="Data/MenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Data/DataGridTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type vm:NewDataViewModel}">

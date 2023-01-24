@@ -2,23 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="{x:Type TextBox}"
            x:Key="TextBoxTheme">
+        <Setter Property="Margin" Value="0 3 0 14"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border CornerRadius="10"
-                            Background="Transparent"
-                            Height="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Height}"
-                            BorderBrush="Gray"
-                            BorderThickness="0.8"
-                            MinWidth="200">
-                        <TextBox Margin="1"
-                                 Text="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Text}"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 VerticalContentAlignment="Center"
-                                 Padding="5"
-                                 Foreground="#292929"/>
-                    </Border>
+                    <StackPanel>
+                        <Border CornerRadius="10"
+                                Background="Transparent"
+                                Height="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Height}"
+                                BorderBrush="Gray"
+                                BorderThickness="0.8"
+                                MinWidth="200">
+                            <TextBox Margin="1"
+                                     Text="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Text, UpdateSourceTrigger=PropertyChanged}"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     TextWrapping="Wrap"
+                                     VerticalContentAlignment="Stretch"
+                                     Padding="5"
+                                     Foreground="#292929"/>
+                        </Border>
+                    </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

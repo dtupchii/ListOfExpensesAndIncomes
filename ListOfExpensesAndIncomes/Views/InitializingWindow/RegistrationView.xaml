@@ -8,65 +8,30 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance Type=vm:RegistrationViewModel}"
              mc:Ignorable="d" FontFamily="Georgia"
-             d:DesignHeight="430" d:DesignWidth="400"
-             x:Name="usC">
-    <UserControl.Resources>
-        <ControlTemplate x:Key="validationFailed">
-            <StackPanel Margin="0 0 0 5">
-                <Border BorderBrush="Red" BorderThickness="1"
-                        CornerRadius="10"
-                        MinWidth="200"
-                        Height="30">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Foreground="Red" FontSize="10" 
-                           Text="Please enter correct beginning balance"
-                           Margin="10 0 0 5"/>
-            </StackPanel>
-        </ControlTemplate>
+             d:DesignHeight="430" d:DesignWidth="450">
+    <Border Background="White"
+            MinWidth="350"
+            MaxWidth="700"
+            CornerRadius="25"
+            Padding="50 30"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
         
-        <ControlTemplate x:Key="emailValidationFailed">
-            <StackPanel Margin="0 0 0 5">
-                <Border BorderBrush="Red" BorderThickness="1"
-                        CornerRadius="10"
-                        MinWidth="200"
-                        Height="30">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Foreground="Red" FontSize="10" 
-                           Text="Please enter correct email"
-                           Margin="10 0 0 5"/>
-            </StackPanel>
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="loginValidationFailed">
-            <StackPanel Margin="0 0 0 5">
-                <Border BorderBrush="Red" BorderThickness="1"
-                        CornerRadius="10"
-                        MinWidth="200"
-                        Height="30">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Foreground="Red" FontSize="10" 
-                           Text="Login should be >3 symbols"
-                           Margin="10 0 0 5"/>
-            </StackPanel>
-        </ControlTemplate>
-    </UserControl.Resources>
-    <Border Background="White" MaxWidth="700" CornerRadius="25"
-            Padding="50 10">
         <Border.Effect>
             <DropShadowEffect BlurRadius="50" ShadowDepth="0" Color="LightGray"/>
         </Border.Effect>
+        
         <StackPanel VerticalAlignment="Center">
-            <StackPanel DataContext="{Binding UserVM}">
+            <StackPanel DataContext="{Binding UserReg}">
+
                 <TextBlock Text="Registration"
                        Style="{StaticResource TitleStyle}"/>
 
                 <TextBlock Text="Email"
-                       Margin="10 10 0 3"/>
+                       Margin="10 0 0 3"/>
                 <TextBox Style="{StaticResource TextBoxTheme}"
-                        Validation.ErrorTemplate="{StaticResource emailValidationFailed}">
+                         Validation.ErrorTemplate="{StaticResource validationFailed}"
+                         Height="30">
                     <TextBox.Text>
                         <Binding Path="Email"
                                  Mode="TwoWay">
@@ -78,12 +43,14 @@
                 </TextBox>
 
                 <TextBlock Text="Login"
-                       Margin="10 10 0 3"/>
+                       Margin="10 0 0 3"/>
                 <TextBox Style="{StaticResource TextBoxTheme}"
-                        Validation.ErrorTemplate="{StaticResource loginValidationFailed}">
+                         Validation.ErrorTemplate="{StaticResource validationFailed}"
+                         Height="30">
                     <TextBox.Text>
                         <Binding Path="Login"
-                                 Mode="TwoWay">
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <DataErrorValidationRule/>
                             </Binding.ValidationRules>
@@ -92,7 +59,7 @@
                 </TextBox>
 
                 <TextBlock Text="Password (from 6 symbols)"
-                       Margin="10 10 0 3"/>
+                       Margin="10 0 0 3"/>
                 <Border CornerRadius="10"
                             Background="Transparent"
                             Height="30"
@@ -109,16 +76,40 @@
                 <TextBlock Text="Beginning Balance"
                        Margin="10 10 0 3"/>
                 <TextBox Style="{StaticResource TextBoxTheme}"
-                        Validation.ErrorTemplate="{StaticResource validationFailed}">
+                        Validation.ErrorTemplate="{StaticResource validationFailed}"
+                         Height="30">
                     <TextBox.Text>
                         <Binding Path="BeginningBalance"
-                                 Mode="TwoWay">
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <DataErrorValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
+
+                <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext}">
+                    <TextBlock Text="Currency"
+                               Margin="10 0 0 3"/>
+                    <ComboBox Margin="0 3 0 10"
+                              ItemsSource="{Binding CurrenciesList, Mode=TwoWay}"
+                              SelectedValue="{Binding SelectedCurrency}"
+                              MaxDropDownHeight="70">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="Name"/>
+                                            <Binding Path="Symbol"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
 
             <Button IsDefault="True"

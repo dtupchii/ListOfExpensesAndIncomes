@@ -4,6 +4,6 @@
     <Style x:Key="TitleStyle" TargetType="TextBlock">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="24"/>
-        <Setter Property="Margin" Value="0 10"/>
+        <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
 </ResourceDictionary>

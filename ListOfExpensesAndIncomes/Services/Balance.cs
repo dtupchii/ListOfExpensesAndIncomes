@@ -10,8 +10,9 @@ namespace ListOfExpensesAndIncomes.Services
 {
     public class Balance
     {
-        public static double CalculateBalance(BindingList<Transaction> transactions, double beginningBalance)
+        public static double CalculateBalance(BindingList<Transaction> transactions, string bB)
         {
+            double beginningBalance = Double.Parse(bB);
             if (transactions.Count > 0)
             {
                 int i = transactions.Count - 1;
@@ -20,17 +21,10 @@ namespace ListOfExpensesAndIncomes.Services
                     if (i == transactions.Count - 1)
                         transactions[i].BalanceBeforeTransaction = beginningBalance;
                     else
-                        transactions[i].BalanceBeforeTransaction = transactions[i + 1].BalanceAfterTransaction;
+                        transactions[i].BalanceBeforeTransaction = Math.Round(transactions[i + 1].BalanceAfterTransaction, 2);
 
-                    switch (transactions[i].Type)
-                    {
-                        case "Income":
-                            transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction + transactions[i].Summ;
-                            break;
-                        case "Purchase":
-                            transactions[i].BalanceAfterTransaction = transactions[i].BalanceBeforeTransaction - transactions[i].Summ;
-                            break;
-                    }
+                    transactions[i].BalanceAfterTransaction = Math.Round(transactions[i].BalanceBeforeTransaction + Double.Parse(transactions[i].Summ), 2);
+                    
                     i--;
                 }
                 while (i >= 0);

@@ -5,214 +5,261 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views"
              xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels"
+             xmlns:serv="clr-namespace:ListOfExpensesAndIncomes.Services"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance Type=vm:NewDataViewModel}"
              mc:Ignorable="d" Background="Transparent"
-             d:DesignHeight="450" d:DesignWidth="680"
+             d:DesignHeight="500" d:DesignWidth="680"
              FontFamily="Georgia">
+
     <UserControl.Resources>
-        <ControlTemplate x:Key="validationFailed">
-            <StackPanel Margin="0 0 0 5">
-                <Border BorderBrush="Red" BorderThickness="1"
-                        CornerRadius="10"
-                        MinWidth="200"
-                        Height="30">
-                    <AdornedElementPlaceholder/>
-                </Border>
-                <TextBlock Foreground="Red" FontSize="10" 
-                           Text="Please enter correct amount"
-                           Margin="10 0 0 5"/>
-            </StackPanel>
-        </ControlTemplate>
+        <serv:BoolToBrushConverter x:Key="btob"/>
     </UserControl.Resources>
-    
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <Border Background="White"
-                MinWidth="300"
+
+    <Border Background="White"
+                MinWidth="340"
                 MaxWidth="500"
-                CornerRadius="25">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="50" 
+                CornerRadius="25"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="50" 
                                   ShadowDepth="0" 
                                   Color="LightGray"/>
-            </Border.Effect>
+        </Border.Effect>
 
-            <StackPanel Margin="30">
-                <TextBlock Text="New data"
-                           HorizontalAlignment="Center"
-                           FontSize="18"/>
-                
-                <TextBlock Text="Type of transaction"/>
-                <ComboBox FontFamily="Georgia"
-                          Padding="5"
-                          Margin="0 5"
-                          Background="Transparent"
-                          SelectedValue="{Binding NewTransaction.Type, Mode=TwoWay}">                          
-                    <ComboBoxItem Content="Income"
-                          Background="Transparent"/>
-                    <ComboBoxItem Content="Purchase"
-                          Background="Transparent"/>
-                </ComboBox>
+        <StackPanel Margin="30 20">
+            <TextBlock Text="New data"
+                        Style="{StaticResource TitleStyle}"/>
+            
+            <TextBlock Text="Type of transaction"/>
+            <ComboBox Margin="0 3 0 10"
+                      ItemsSource="{Binding ItemList}"
+                      SelectedItem="{Binding SelectedType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding UpdateSummCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
 
-                <TextBlock Text="Date"/>
-                <DatePicker Margin="0 5" Padding="5 4"
-                            DisplayDateEnd="{Binding Today}">
-                    <DatePicker.Resources>
-                        <Style TargetType="{x:Type DatePickerTextBox}">
-                            <Setter Property="Control.Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Border CornerRadius="5"
-                                                    BorderBrush="Gray"
-                                                    BorderThickness="0.8"
-                                                    Padding="2">
-                                            <TextBox x:Name="PART_TextBox" 
-                                                    BorderBrush="Transparent"
-                                                     BorderThickness="0"
-                                                 Text="{Binding Path=SelectedDate, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DatePicker.Resources>
-                </DatePicker>
+            <TextBlock Text="Date"/>
+            <DatePicker Margin="0 3 0 10"
+                        Padding="0"
+                        VerticalContentAlignment="Center"
+                        DisplayDateEnd="{Binding Today}"
+                        BorderBrush="Transparent"
+                        SelectedDate="{Binding Path=NewTransaction.Date, Mode=TwoWay, StringFormat='MM/dd/yyyy'}">
+                <DatePicker.Resources>
+                    <Style TargetType="{x:Type DatePickerTextBox}">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Border BorderBrush="{Binding ElementName=DatePickerTextBox, Path=(Validation.HasError), Converter={StaticResource btob}}"
+                                            CornerRadius="10"
+                                            BorderThickness="0.8"
+                                            Height="23">
+                                        <TextBox BorderThickness="0"
+                                                 Padding="4 0"
+                                                 Background="Transparent"
+                                                 VerticalContentAlignment="Center"
+                                                 Validation.ErrorTemplate="{x:Null}"
+                                                 Foreground="#292929"
+                                                 x:Name="DatePickerTextBox"                                               
+                                                 Text="{Binding Path=DataContext.NewTransaction.Date, Mode=TwoWay, StringFormat='MM/dd/yyyy', 
+                                                 RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" >
+                                        </TextBox>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.Resources>
 
-                <TextBlock Text="Time"
-                           Margin="0 10 0 3"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <Border Grid.Column="0"
-                            Height="25"
-                            CornerRadius="10"
-                            Margin="0 5"
-                            BorderBrush="Gray"
-                            BorderThickness="0.8">
-                        
-                        <Grid Margin="15 3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="20"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{Binding StopTimerCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DatePicker>
 
-                            <TextBox Grid.Column="0"
-                                     Grid.RowSpan="2"
-                                     BorderThickness="0"
-                                     Text="23"
-                                     VerticalContentAlignment="Center"
-                                     HorizontalContentAlignment="Center"/>
+            <TextBlock Text="Time"/>
+            <Grid Margin="0 3 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="1"
+                <Border Grid.Column="0"
+                        Height="28"
+                        CornerRadius="10"
+                        BorderBrush="{Binding ElementName=HoursTB, Path=(Validation.HasError), Converter={StaticResource btob}}"
+                        BorderThickness="0.8">
+
+                    <Grid Margin="8 2"
+                          DataContext="{Binding NewTransaction}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox FontFamily="Noto Sans Japanese" 
+                                 Grid.Column="0"
+                                 Grid.RowSpan="2"
+                                 BorderThickness="0"
+                                 FontStyle="Italic"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 x:Name="HoursTB"
+                                 FontSize="14"
+                                 Validation.ErrorTemplate="{x:Null}">
+                            <TextBox.Text>
+                                <Binding Path="Hours"
+                                         Mode="TwoWay">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="GotFocus">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=StopTimerCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                        <Button Grid.Column="1"
                                     Margin="1"
-                                    BorderThickness="0.5">
-                                <Image Source="/Data/Images/up.png"
+                                    BorderThickness="0.5"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                Path=DataContext.MinusHoursCommand}">
+                            <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\up.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
-                            </Button>
-                            <Button Grid.Column="1"
+                        </Button>
+                        <Button Grid.Column="1"
                                     Grid.Row="1"
                                     Margin="1"
-                                    BorderThickness="0.5">
-                                <Image Source="/Data/Images/down.png"
+                                    BorderThickness="0.5"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                Path=DataContext.AddHoursCommand}">
+                            <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\down.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
-                            </Button>
-                        </Grid>
-                    </Border>
-                    
-                    <TextBlock Grid.Column="1"
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <TextBlock Grid.Column="1"
                                Text=":"
                                FontSize="20"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"/>
 
-                    <Border Grid.Column="2"
-                            Height="25"
-                            CornerRadius="10"
-                            Margin="0 5"
-                            BorderBrush="Gray"
-                            BorderThickness="0.8">
+                <Border Grid.Column="2"
+                        Height="28"
+                        CornerRadius="10"
+                        BorderBrush="{Binding ElementName=MinutesTB, Path=(Validation.HasError), Converter={StaticResource btob}}"
+                        BorderThickness="0.8">
 
-                        <Grid Margin="15 3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="20"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
+                    <Grid Margin="8 2"
+                          DataContext="{Binding NewTransaction}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                            <TextBox Grid.Column="0"
-                                     Grid.RowSpan="2"
-                                     BorderThickness="0"
-                                     Text="45"
-                                     VerticalContentAlignment="Center"
-                                     HorizontalContentAlignment="Center"/>
+                        <TextBox FontFamily="Noto Sans Japanese" 
+                                 Grid.Column="0"
+                                 Grid.RowSpan="2"
+                                 BorderThickness="0"
+                                 FontStyle="Italic"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 FontSize="14"
+                                 x:Name="MinutesTB"
+                                 Validation.ErrorTemplate="{x:Null}">
+                            <TextBox.Text>
+                                <Binding Path="Minutes"
+                                         Mode="TwoWay">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
 
-                            <Button Grid.Column="1"
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="GotFocus">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=StopTimerCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                        <Button Grid.Column="1"
                                     Margin="1"
-                                    BorderThickness="0.5">
-                                <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\up.png"
+                                    BorderThickness="0.5"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                Path=DataContext.MinusMinutesCommand}">
+                            <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\up.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
-                            </Button>
-                            <Button Grid.Column="1"
+                        </Button>
+                        <Button Grid.Column="1"
                                     Grid.Row="1"
                                     Margin="1"
-                                    BorderThickness="0.5">
-                                <Image Source="/Data/Images/down.png"
+                                    BorderThickness="0.5"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                Path=DataContext.AddMinutesCommand}">
+                            <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\down.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
-                            </Button>
-                        </Grid>
-                    </Border>
-                </Grid>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
 
-                <StackPanel DataContext="{Binding NewTransaction}"
-                            Margin="0 0 0 5">
-                    <TextBlock Text="Amount"/>
-                    <TextBox TextWrapping="Wrap"
-                             Style="{StaticResource TextBoxTheme}"
-                             Validation.ErrorTemplate="{StaticResource validationFailed}"
-                             Margin="0 5" 
-                             Padding="5 4">
-                        <TextBox.Text>
-                            <Binding Path="Summ"
-                                    Mode="TwoWay">
-                                <Binding.ValidationRules>
-                                    <DataErrorValidationRule/>
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                </StackPanel>
-
-                <TextBlock Text="Description"/>
-                <TextBox Text="{Binding NewTransaction.Description, Mode=TwoWay}"
+            <StackPanel DataContext="{Binding NewTransaction}">
+                <TextBlock Text="Amount"/>
+                <TextBox TextWrapping="Wrap"
                          Style="{StaticResource TextBoxTheme}"
-                         Height="50"
-                         TextWrapping="Wrap"
-                         Margin="0 5" Padding="5 4"
-                         MaxHeight="100"
-                         MinHeight="50"/>
-                
-                <Button IsDefault="True"
-                        Command="{Binding AddTransactionCommand}"                        
-                        Style="{StaticResource EnterButton}">
-
-                    <TextBlock Text="Enter"
-                           FontSize="18"/>
-                </Button>
+                         Validation.ErrorTemplate="{StaticResource validationFailed}"
+                         Height="28">
+                    <TextBox.Text>
+                        <Binding Path="Summ"
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </StackPanel>
-        </Border>
-    </StackPanel>
+
+            <TextBlock Text="Description"/>
+            <TextBox Text="{Binding NewTransaction.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource TextBoxTheme}"
+                     Height="40"
+                     MaxHeight="100"
+                     MinHeight="30"/>
+
+            <Button IsDefault="True"
+                    Command="{Binding AddTransactionCommand}"                        
+                    Style="{StaticResource EnterButton}">
+
+                <TextBlock Text="Enter"
+                           FontSize="18"/>
+            </Button>
+        </StackPanel>
+    </Border>
 </UserControl>

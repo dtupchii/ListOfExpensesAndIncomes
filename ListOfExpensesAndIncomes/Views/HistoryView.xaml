@@ -7,6 +7,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views"
              xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels"
+             xmlns:serv="clr-namespace:ListOfExpensesAndIncomes.Services"
              d:DataContext="{d:DesignInstance Type=vm:HistoryViewModel}"
              mc:Ignorable="d" FontFamily="Georgia"
              d:DesignHeight="430" d:DesignWidth="700">
@@ -15,6 +16,8 @@
             <sys:String>Income</sys:String>
             <sys:String>Purchase</sys:String>
         </col:ArrayList>
+
+        <serv:TypeToTextConverter x:Key="ttot"/>
     </UserControl.Resources>
     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
         <Border Margin="20" Background="White" 
@@ -25,17 +28,15 @@
                                   Color="LightGray"/>
             </Border.Effect>
 
-            <DataGrid Background="White" Margin="20" Height="330"
-                      CanUserAddRows="False" CanUserDeleteRows="False" 
-                      AutoGenerateColumns="False" GridLinesVisibility="None"
-                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+            <DataGrid Style="{StaticResource DataGridTheme}"
                       ItemsSource="{Binding UserHistory.Transactions, Mode=TwoWay}"
                       SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                            Path=DataContext.SelectedTransaction, Mode=TwoWay}"
-                      BorderThickness="0">
+                                            Path=DataContext.SelectedTransaction, Mode=TwoWay}">
 
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
+                        <Setter Property="FontFamily" Value="Noto Sans Japanese"/>
+                        <!--<Setter Property="Height" Value="25"/>-->
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Type}" Value="Income">
                                 <Setter Property="Foreground" Value="DarkGreen"/>
@@ -43,8 +44,10 @@
                             <DataTrigger Binding="{Binding Type}" Value="Purchase">
                                 <Setter Property="Foreground" Value="OrangeRed"/>
                             </DataTrigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Transparent"/>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#f6f6f6"/>
+                                <Setter Property="Cursor" Value="Hand"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -52,48 +55,69 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Date"
-                                        Binding="{Binding TimeOfTransaction, StringFormat='dd/MM/yyyy', Mode=TwoWay}"
-                                        Width="175"> <!--hh:mmtt-->
-                    </DataGridTextColumn>
+                                        Binding="{Binding TimeOfTransaction, Mode=TwoWay, StringFormat={}{0:MM/dd/yyyy HH:mm}}"
+                                        Width="110"                                        
+                                        ElementStyle="{StaticResource TextColumnStyle}"
+                                        EditingElementStyle="{StaticResource EditingTextColumnStyle}"/>
                     <DataGridTextColumn Header="Amount" 
-                                        Binding="{Binding Summ, Mode=TwoWay}" 
-                                        Width="100"/>
+                                        Width="100"
+                                        Binding="{Binding Summ, Mode=TwoWay}"
+                                        ElementStyle="{StaticResource TextColumnStyle}"
+                                        EditingElementStyle="{StaticResource EditingTextColumnStyle}"/>
                     <DataGridTextColumn Header="Balance" 
-                                        Binding="{Binding BalanceAfterTransaction, Mode=TwoWay}" 
-                                        Width="100" IsReadOnly="True"/>
-                    <DataGridComboBoxColumn Header="Type"                                            
-                                            SelectedItemBinding="{Binding Type, Mode=TwoWay}" 
-                                            Width="110"
+                                        Binding="{Binding BalanceAfterTransaction, Mode=TwoWay, StringFormat={}{0:0.00}}" 
+                                        Width="100" IsReadOnly="True"
+                                        ElementStyle="{StaticResource BalanceTextColumnStyle}"/>
+                    <DataGridComboBoxColumn Header="Type"
+                                            SelectedItemBinding="{Binding Type, Mode=TwoWay}"
+                                            Width="80"
                                             ItemsSource="{Binding Source={StaticResource types}}"/>
+                    <!--<DataGridComboBoxColumn.ElementStyle>
+                            <Style TargetType="{x:Type DataGridComboBoxColumn}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridComboBoxColumn.ElementStyle>-->
+                                            <!--ElementStyle="{StaticResource TextColumnStyle}"
+                                            EditingElementStyle="{StaticResource EditingComboBoxColumnStyle}"-->
                     <DataGridTextColumn Header="Description"
+                                        CanUserResize="False"
                                         Binding="{Binding Description, Mode=TwoWay}" 
-                                        Width="*"/>
-                    
-                    <DataGridTemplateColumn>
+                                        Width="*"
+                                        ElementStyle="{StaticResource TextColumnStyle}"
+                                        EditingElementStyle="{StaticResource EditingTextColumnStyle}"/>
+
+                    <DataGridTemplateColumn CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
                                     <Button Background="Transparent"
                                             BorderBrush="Transparent"
-                                            Visibility="Visible"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                                Path=DataContext.DeleteCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
-                                            Path=DataContext.SelectedTransaction, Mode=TwoWay}"
-                                            Height="20" 
+                                            Visibility="Hidden"
+                                            Height="20"
                                             VerticalAlignment="Center"
-                                            x:Name="bin_button">
-                                        
+                                            x:Name="bin_button"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                              Path=DataContext.DeleteCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                       Path=DataContext.SelectedTransaction, Mode=TwoWay}">
+
                                         <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\bin_icon.png"
                                                    HorizontalAlignment="Center" />
                                     </Button>
                                 </StackPanel>
-                                
+
                                 <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="False">
-                                        <Setter TargetName="bin_button" Property="Visibility" Value="Hidden"/>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
+                                        <Setter TargetName="bin_button" Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
-                                </DataTemplate.Triggers>                                
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </Trigger>
+                                </DataTemplate.Triggers>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
