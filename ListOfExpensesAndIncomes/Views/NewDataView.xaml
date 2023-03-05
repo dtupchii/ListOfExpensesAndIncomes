@@ -39,7 +39,7 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding UpdateSummCommand}"/>
-                    </i:EventTrigger>
+                    </i:EventTrigger> 
                 </i:Interaction.Triggers>
             </ComboBox>
 
@@ -78,7 +78,7 @@
 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="GotFocus">
-                        <i:InvokeCommandAction Command="{Binding StopTimerCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding StopDateTimerCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </DatePicker>
@@ -129,7 +129,7 @@
 
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="GotFocus">
-                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=StopTimerCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StopTimeTimerCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBox>
@@ -137,8 +137,13 @@
                         <Button Grid.Column="1"
                                     Margin="1"
                                     BorderThickness="0.5"
-                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
                                                 Path=DataContext.MinusHoursCommand}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="GotFocus">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StopTimeTimerCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\up.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
@@ -149,6 +154,11 @@
                                     BorderThickness="0.5"
                                     Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
                                                 Path=DataContext.AddHoursCommand}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="GotFocus">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StopTimeTimerCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\down.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
@@ -200,7 +210,7 @@
 
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="GotFocus">
-                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=StopTimerCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StopTimeTimerCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBox>
@@ -210,6 +220,11 @@
                                     BorderThickness="0.5"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
                                                 Path=DataContext.MinusMinutesCommand}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="GotFocus">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StopTimeTimerCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\up.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>
@@ -220,6 +235,11 @@
                                     BorderThickness="0.5"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
                                                 Path=DataContext.AddMinutesCommand}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="GotFocus">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.StopTimeTimerCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\down.png"
                                        Height="10"
                                        VerticalAlignment="Center"/>

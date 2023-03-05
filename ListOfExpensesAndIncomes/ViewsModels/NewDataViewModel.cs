@@ -17,13 +17,13 @@ namespace ListOfExpensesAndIncomes.ViewsModels
 {
     public class NewDataViewModel : ObservableObject
     {
-        private readonly User _user;
         private readonly ApplicationContext _db;
-        private Transaction _newTransaction = new();
+        private Transaction _newTransaction = new Transaction();
         private string _selectedItem;
         private RelayCommand _addTransactionCommand;
-        private RelayCommand _addHoursCommand, _addMinutesCommand, _minusHoursCommand, _minusMinutesCommand, _stopTimerCommand, _updateSummCommand;
-        DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        private RelayCommand _addHoursCommand, _addMinutesCommand, _minusHoursCommand, _minusMinutesCommand, _stopDateTimerCommand, _stopTimeTimerCommand, _updateSummCommand;
+        DispatcherTimer dispatcherTimerForDate = new DispatcherTimer();
+        DispatcherTimer dispatcherTimerForTime = new DispatcherTimer();
 
 
         #region Properties
@@ -52,7 +52,7 @@ namespace ListOfExpensesAndIncomes.ViewsModels
         public NewDataViewModel(User user, ApplicationContext db)
         {
             _db = db;
-            _user = user;
+            NewTransaction.User = user;
             SelectedType = ItemList[0];
             NewTransaction.Type = SelectedType;
 
@@ -141,11 +141,18 @@ namespace ListOfExpensesAndIncomes.ViewsModels
                     o => Conditions());
             }
         }
-        public RelayCommand StopTimerCommand
+        public RelayCommand StopDateTimerCommand
         {
             get
             {
-                return _stopTimerCommand ??= new RelayCommand(o => dispatcherTimer.Stop(), o => true);
+                return _stopDateTimerCommand ??= new RelayCommand(o => dispatcherTimerForDate.Stop(), o => true);
+            }
+        }
+        public RelayCommand StopTimeTimerCommand
+        {
+            get
+            {
+                return _stopTimeTimerCommand ??= new RelayCommand(o => dispatcherTimerForTime.Stop(), o => true);
             }
         }
         public RelayCommand UpdateSummCommand
@@ -154,8 +161,10 @@ namespace ListOfExpensesAndIncomes.ViewsModels
             {
                 return _updateSummCommand ??= new RelayCommand(o =>
                 {
-                    string s = NewTransaction.Summ;
-                    NewTransaction.Summ = s;
+                    NewTransaction.Type = SelectedType;
+                    NewTransaction.Summ = NewTransaction.Summ + " ";
+                    NewTransaction.Summ = NewTransaction.Summ.Remove(NewTransaction.Summ.Length - 1);
+
                 }, o => true);
             }
         }
@@ -174,14 +183,14 @@ namespace ListOfExpensesAndIncomes.ViewsModels
                     NewTransaction.Summ = (Double.Parse(NewTransaction.Summ) * (-1)).ToString();
                 }
                 string s = String.Format("{0:0.00}", Double.Parse(NewTransaction.Summ));
-                Transaction transaction = new() { Type = NewTransaction.Type, TimeOfTransaction = timeOfT, Summ = s, Description = NewTransaction.Description, User = _user, UserId = _user.UserId };
+                Transaction transaction = new() { Type = NewTransaction.Type, TimeOfTransaction = timeOfT, Summ = s, Description = NewTransaction.Description, User = NewTransaction.User, UserId = NewTransaction.User.UserId };
 
                 try
                 {
-                    _user.Transactions.Add(transaction);
+                    NewTransaction.User.Transactions.Add(transaction);
                     _db.Transactions.Add(transaction);
                     _db.SaveChanges();
-                    CopyOfList.MakeCopy(_user.Transactions);
+                    CopyOfList.MakeCopy(NewTransaction.User.Transactions);
 
                     MessageBox.Show("Item added and saved");
 
@@ -191,7 +200,8 @@ namespace ListOfExpensesAndIncomes.ViewsModels
                     NewTransaction.Minutes = DateTime.Now.Minute.ToString();
                     NewTransaction.Summ = "";
                     NewTransaction.Description = "";
-                    dispatcherTimer.Start();
+                    dispatcherTimerForDate.Start();
+                    dispatcherTimerForTime.Start();
                 }
                 catch
                 {
@@ -223,14 +233,20 @@ namespace ListOfExpensesAndIncomes.ViewsModels
 
         private void DispatcherTimerSetup()
         {
-            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
-            dispatcherTimer.Tick += new EventHandler(CurrentTimeText);
-            dispatcherTimer.Start();
-        }
+            dispatcherTimerForDate.Interval = TimeSpan.FromSeconds(1);
+            dispatcherTimerForDate.Tick += new EventHandler(CurrentDateText);
+            dispatcherTimerForDate.Start();
 
-        private void CurrentTimeText(object sender, EventArgs e)
+            dispatcherTimerForTime.Interval = TimeSpan.FromSeconds(1);
+            dispatcherTimerForTime.Tick += new EventHandler(CurrentTimeText);
+            dispatcherTimerForTime.Start();
+        }
+        private void CurrentDateText(object sender, EventArgs e)
         {
             NewTransaction.Date = DateTime.Today;
+        }
+        private void CurrentTimeText(object sender, EventArgs e)
+        {
             NewTransaction.Hours = DateTime.Now.ToString("HH");
             NewTransaction.Minutes = DateTime.Now.ToString("mm");
         }

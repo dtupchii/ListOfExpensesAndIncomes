@@ -11,7 +11,8 @@
     <Border Background="#ffdada" CornerRadius="15">        
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Style="{StaticResource TopPanel}">
-                <Button Style="{StaticResource TopPanelButtons}">
+                <Button Style="{StaticResource TopPanelButtons}"
+                        Click="Button_Click">
                     <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\close_icon_alternative.png"/>
                 </Button>
 
@@ -19,7 +20,9 @@
                     <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\restore_down_icon_alternative.png"/>
                 </Button>
 
-                <Button Style="{StaticResource TopPanelButtons}">
+                <Button Style="{StaticResource TopPanelButtons}"
+                        x:Name="minimizeB"
+                        Click="minimizeB_Click">
                     <TextBlock Text="__"/>
                 </Button>
             </StackPanel>
@@ -50,11 +53,11 @@
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding HistoryViewCommand}"/>
                     
-                    <RadioButton Content="Statistics"
+                    <!--<RadioButton Content="Statistics"
                                  Style="{StaticResource MenuButtonTheme}"/>
                     
                     <RadioButton Content="Settings"
-                                 Style="{StaticResource MenuButtonTheme}"/>
+                                 Style="{StaticResource MenuButtonTheme}"/> -->
                 </StackPanel>
 
                 <StackPanel Grid.Column="1"

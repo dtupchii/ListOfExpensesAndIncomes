@@ -13,7 +13,7 @@
                         Background="Transparent"
                         BorderBrush="Gray"
                         BorderThickness="0.8"
-                        Height="28"
+                        Height="27"
                     MinHeight="20"/>
             <Border Grid.Column="0"
                     CornerRadius="0" 
@@ -133,8 +133,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-        </Style.Triggers>
     </Style>
     
     <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">

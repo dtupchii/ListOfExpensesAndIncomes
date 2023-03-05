@@ -23,7 +23,7 @@ namespace ListOfExpensesAndIncomes.Models
         private DateTime _date = DateTime.Now.Date;
         private string _hours = DateTime.Now.Hour.ToString();
         private string _minutes = DateTime.Now.Minute.ToString();
-        object locker = new();
+
         public DateTime TimeOfTransaction
         {
             get => _timeOfTransaction;
@@ -32,7 +32,10 @@ namespace ListOfExpensesAndIncomes.Models
         public string Summ
         {
             get => _summ;
-            set => Set(ref _summ, value);
+            set
+            {
+                Set(ref _summ, value);
+            }
         }
         public string Type
         {
@@ -141,26 +144,7 @@ namespace ListOfExpensesAndIncomes.Models
         {
             get { throw new NotImplementedException(); }
         }
-
         public object Clone() => new Transaction { TimeOfTransaction = TimeOfTransaction, Summ = Summ, Type = Type, Description = Description,
             User = new User { Email = User.Email, Login = User.Login, Password = User.Password, BeginningBalance = User.BeginningBalance, Currency = User.Currency, CurrencyId = User.CurrencyId } };
-
-
-        //private void CheckingSumm(object? e)
-        //{
-        //    lock (locker)
-        //    {
-        //        string summIncomePattern = @"(^[1-9]+(\d*)?(\.)?(\d{1,2})?$)|(^[0-9]?\.\d{1,2}$)|(^0$)",
-        //                   summPurchasePattern = @"(^\-?[1-9]+(\d*)?(\.)?(\d{1,2})?$)|(^\-?[0-9]?\.\d{1,2}$)|(^0$)";
-        //        if (Type == "Income" && Summ.Length > 0 && !Regex.IsMatch(Summ, summIncomePattern))
-        //        {
-        //            e = "Amount should be over 0";
-        //        }
-        //        else if (Type == "Purchase" && Summ.Length > 0 && !Regex.IsMatch(Summ, summPurchasePattern))
-        //        {
-        //            e = "Enter correct amount";
-        //        }
-        //    }
-        //}
     }
 }

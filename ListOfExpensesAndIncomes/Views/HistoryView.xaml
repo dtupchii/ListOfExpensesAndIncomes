@@ -6,6 +6,7 @@
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ListOfExpensesAndIncomes.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:vm="clr-namespace:ListOfExpensesAndIncomes.ViewsModels"
              xmlns:serv="clr-namespace:ListOfExpensesAndIncomes.Services"
              d:DataContext="{d:DesignInstance Type=vm:HistoryViewModel}"
@@ -36,7 +37,6 @@
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="FontFamily" Value="Noto Sans Japanese"/>
-                        <!--<Setter Property="Height" Value="25"/>-->
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Type}" Value="Income">
                                 <Setter Property="Foreground" Value="DarkGreen"/>
@@ -61,28 +61,36 @@
                                         EditingElementStyle="{StaticResource EditingTextColumnStyle}"/>
                     <DataGridTextColumn Header="Amount" 
                                         Width="100"
-                                        Binding="{Binding Summ, Mode=TwoWay}"
+                                        Binding="{Binding Summ, Mode=TwoWay, ValidatesOnDataErrors=True}"
                                         ElementStyle="{StaticResource TextColumnStyle}"
                                         EditingElementStyle="{StaticResource EditingTextColumnStyle}"/>
                     <DataGridTextColumn Header="Balance" 
                                         Binding="{Binding BalanceAfterTransaction, Mode=TwoWay, StringFormat={}{0:0.00}}" 
                                         Width="100" IsReadOnly="True"
                                         ElementStyle="{StaticResource BalanceTextColumnStyle}"/>
-                    <DataGridComboBoxColumn Header="Type"
-                                            SelectedItemBinding="{Binding Type, Mode=TwoWay}"
-                                            Width="80"
-                                            ItemsSource="{Binding Source={StaticResource types}}"/>
-                    <!--<DataGridComboBoxColumn.ElementStyle>
-                            <Style TargetType="{x:Type DataGridComboBoxColumn}">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Cursor" Value="Hand"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridComboBoxColumn.ElementStyle>-->
-                                            <!--ElementStyle="{StaticResource TextColumnStyle}"
-                                            EditingElementStyle="{StaticResource EditingComboBoxColumnStyle}"-->
+                    <DataGridTemplateColumn Header="Type"
+                                            Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center">
+                                    <ComboBox SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding Source={StaticResource types}}"
+                                              Style="{StaticResource DataGridComboBox}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction 
+                                                                Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                Path=DataContext.UpdateInfoCommand}"
+                                                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                       Path=DataContext.SelectedTransaction, Mode=TwoWay}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                     <DataGridTextColumn Header="Description"
                                         CanUserResize="False"
                                         Binding="{Binding Description, Mode=TwoWay}" 
@@ -97,8 +105,9 @@
                                     <Button Background="Transparent"
                                             BorderBrush="Transparent"
                                             Visibility="Hidden"
-                                            Height="20"
+                                            Height="30"
                                             VerticalAlignment="Center"
+                                            VerticalContentAlignment="Center"
                                             x:Name="bin_button"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
                                                               Path=DataContext.DeleteCommand}"
@@ -106,7 +115,9 @@
                                                                        Path=DataContext.SelectedTransaction, Mode=TwoWay}">
 
                                         <Image Source="C:\Users\user\source\repos\ListOfExpensesAndIncomes\ListOfExpensesAndIncomes\Data\Images\bin_icon.png"
-                                                   HorizontalAlignment="Center" />
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Height="20"/>
                                     </Button>
                                 </StackPanel>
 
